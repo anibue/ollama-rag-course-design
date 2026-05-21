@@ -1,0 +1,130 @@
+基于 Ollama 的本地大模型部署与计算机专业文档问答应用开发
+
+摘  要
+
+本课程设计围绕“本地大模型部署与计算机专业文档问答”展开，目标是在本机环境中完成 Ollama 模型服务部署，并在此基础上开发一个可运行、可评测、可复现的专业文档问答系统。系统以计算机网络、操作系统、数据库系统、人工智能与 RAG 技术等资料为知识库，完成文档读取、文本切分、向量化表示、相似度检索、Prompt 组织和本地大模型生成。实现上采用 Ollama 提供生成模型和 Embedding 模型能力，使用 langchain-ollama 调用本地接口，使用 scikit-learn 计算余弦相似度完成轻量向量检索，并提供命令行问答、Streamlit 页面和批量评测脚本。该方案避免把参考文档示例简单照搬，而是围绕课程要求构建了适合计算机专业资料问答的完整 RAG 应用。
+
+第一章 绪论
+
+1.1 研究背景与意义
+
+大语言模型具有较强的自然语言理解和生成能力，但通用模型本身并不总能准确掌握某门课程、某份教材或某组技术文档中的细节内容。如果直接向模型提问，模型可能依据训练阶段形成的通用知识回答，也可能在缺乏依据时生成看似合理但并不正确的内容。对于计算机专业课程学习和技术文档检索而言，这类问题会影响答案可信度，也不利于用户追溯原始资料。
+
+RAG，即检索增强生成，是解决上述问题的一种常见技术路线。它不要求把全部专业文档重新训练进模型，而是在用户提问时先从本地知识库中检索相关片段，再把检索片段和问题一起交给大模型生成答案。这样可以把模型生成限制在可追溯资料范围内，降低幻觉概率，并提高专业文档问答的可解释性。
+
+本课程设计选择“计算机专业文档问答”作为具体 NLP 应用任务，原因主要有三点。第一，任务与计算机专业学习场景贴近，问题、答案和来源资料容易准备。第二，该任务能够覆盖文档解析、文本切分、Embedding、向量检索、Prompt 设计和大模型生成等关键技术点，能够体现完整应用开发能力。第三，系统可以通过 30 条评测问题进行批量测试，便于在报告中分析检索命中率、答案覆盖度和响应时间。
+
+1.2 任务定义
+
+本系统的输入包括两类。第一类输入是专业文档，当前项目在 data 目录中准备了计算机网络、操作系统、数据库系统、人工智能与 RAG 技术四份 Markdown 文档，后续也可以加入 TXT、Markdown 或 PDF 文件。第二类输入是用户提出的自然语言问题，例如“虚拟内存的作用是什么？”“B+ 树索引为什么适合范围查询？”“RAG 的基本流程是什么？”。
+
+系统输出包括三部分。第一部分是由本地大模型生成的自然语言答案。第二部分是答案所依据的来源片段，包括文件名、页码信息和相似度分数。第三部分是运行统计信息，包括检索耗时、生成耗时、总耗时、Top-K 参数和模型名称。这样的输出形式既满足问答功能，也满足实验评测和报告分析需要。
+
+1.3 技术路线
+
+系统采用本地 Ollama 服务作为模型运行基础。根据 port.md 标注，Ollama API 地址使用 http://localhost:8090。生成模型默认配置为 qwen2.5:7b，Embedding 模型默认配置为 nomic-embed-text。代码配置集中保存在 src/config.py 中，便于统一修改端口、模型和 RAG 参数。
+
+整体技术路线如下：首先读取 data 目录中的专业文档；然后按固定 chunk_size 和 chunk_overlap 将长文本切成语义片段；接着调用 Ollama Embedding 模型生成每个片段的向量；再把片段内容、元数据和向量保存到 chroma_db/knowledge_index.json；用户提问时系统生成问题向量，同时计算字符 n-gram TF-IDF 匹配分数，将向量相似度和关键词相似度加权融合，找出 Top-K 个最相关片段；最后把片段和问题填入 Prompt，由本地大模型生成答案。
+
+第二章 环境配置与模型选择
+
+2.1 软件环境
+
+项目运行环境建议使用 Windows + Docker Desktop 或本机 Ollama 服务。port.md 中说明 Ollama 端口映射为 8090:11434，因此代码中不使用 Ollama 默认的 11434，而是固定访问 http://localhost:8090。Python 环境使用 conda 管理，环境名为 nlprag。主要依赖包括 langchain-ollama、scikit-learn、streamlit 和 pypdf。其中 langchain-ollama 用于调用 Ollama 的 LLM 和 Embedding 接口；scikit-learn 用于相似度计算；streamlit 用于构建 Web 页面；pypdf 用于扩展 PDF 文档解析能力。
+
+2.2 模型选择
+
+生成模型选择 qwen2.5:7b，主要理由是它对中文问题理解较好，参数规模相对适中，适合普通个人电脑完成课程设计演示。如果硬件资源不足，也可以把 src/config.py 中的 LLM_MODEL 改为 qwen2.5:3b，以换取更快响应速度。Embedding 模型选择 nomic-embed-text，原因是它可以通过 Ollama 本地部署，调用方式与生成模型一致，便于统一环境并避免依赖外部云 API。
+
+2.3 运行命令
+
+运行前需要确认 Ollama 服务可访问：
+
+curl http://localhost:8090/api/tags
+
+进入项目目录后执行：
+
+conda activate nlprag
+pip install -r requirements.txt
+python src/build_kb.py
+python src/rag_chain.py --question "虚拟内存的作用是什么？"
+streamlit run src/app.py
+python src/eval.py
+
+其中 build_kb.py 用于构建知识库，rag_chain.py 用于命令行问答，app.py 用于 Web 页面，eval.py 用于批量评测。
+
+第三章 系统设计与实现
+
+3.1 系统架构
+
+系统由五个模块组成。配置模块 src/config.py 负责维护基础路径、端口、模型名称、切分参数和检索参数。知识库构建模块 src/build_kb.py 负责读取文档、切分文本、调用 Embedding 模型并保存索引。问答模块 src/rag_chain.py 负责加载索引、执行向量检索、构造 Prompt 和调用生成模型。页面模块 src/app.py 提供 Streamlit 交互界面。评测模块 src/eval.py 读取 eval_questions.csv 中的 30 条样本，逐条运行问答并输出结果。
+
+3.2 文档解析与文本切分
+
+文档解析阶段支持 TXT、Markdown 和 PDF。文本文件优先使用 UTF-8、UTF-8-SIG 和 GB18030 读取，以兼容常见中文资料。PDF 解析使用 pypdf，并保留页码信息。由于不同类型文档最终都会转化为统一的文本和元数据结构，后续切分、向量化和检索流程不需要关心原始文件类型。
+
+文本切分阶段设置 CHUNK_SIZE 为 420，CHUNK_OVERLAP 为 80。相比把整份短资料切成很少的大块，这种设置能让“虚拟内存”“B+ 树索引”“TCP 可靠传输”等专业概念更容易被单独召回。重叠区间用于缓解分句边界导致的信息丢失。切分函数会优先在段落、换行、句号、分号、逗号和空格处截断，尽量保持片段语义完整。
+
+3.3 向量索引设计
+
+参考文档中使用 ChromaDB 作为向量数据库。本项目考虑到课程设计复现成本和 port.md 中强调的 scikit-learn 依赖，采用更轻量的 JSON 索引方案。build_kb.py 为每个文本片段生成向量后，将片段编号、内容、来源文件、页码、字符数和向量统一保存到 chroma_db/knowledge_index.json。目录名仍保留 chroma_db，是为了与课程资料中推荐结构保持一致，但内部实现没有照搬 ChromaDB。
+
+这种设计的优点是透明、易解释、便于在报告中展示数据结构，也减少数据库服务或额外持久化依赖。缺点是当文档规模很大时，JSON 文件加载和全量余弦相似度计算效率会下降。因此它更适合课程设计和中小规模专业文档问答；如果后续扩展到大量教材、论文和手册，可以迁移到 ChromaDB、FAISS 或 Milvus。
+
+3.4 检索与生成流程
+
+问答阶段首先加载 knowledge_index.json，然后调用 nomic-embed-text 把用户问题转成向量。系统使用 scikit-learn 的 cosine_similarity 计算问题向量与所有文档片段向量之间的余弦相似度，同时使用 TfidfVectorizer 的字符 n-gram 模式计算中文术语匹配分数。最终检索分数由 45% 向量分和 55% 关键词分加权得到，并按分数降序选取 Top-K 个片段。默认 Top-K 为 4。检索结果包含片段内容、来源文件、综合分、向量分和关键词分。
+
+Prompt 设计强调三点约束。第一，模型必须只依据参考资料回答。第二，如果参考资料中没有明确依据，必须回答“知识库中没有找到明确答案”。第三，答案需要给出引用来源，说明依据片段编号和文件名。这样设计是为了降低幻觉风险，并满足课程设计中对结果可解释性的要求。
+
+第四章 实验与评测
+
+4.1 测试数据
+
+项目提供 eval_questions.csv，包含 30 条测试样本，覆盖网络、操作系统、数据库、人工智能和 RAG 五类知识。每条样本包含问题、参考答案和期望命中文档。示例问题包括“TCP 为什么适合文件传输和网页访问？”“死锁产生的四个必要条件是什么？”“MVCC 如何减少读写冲突？”“RAG 的基本流程是什么？”等。样本数量满足进阶层要求的 30 条评测条件。
+
+4.2 评测指标
+
+本系统提供三个自动统计指标。第一个指标是检索命中率，即 Top-K 来源文件中是否包含期望来源文件。它用于衡量向量检索是否把问题定位到正确资料。第二个指标是参考答案覆盖度，eval.py 使用字符级或词级重叠粗略估计模型答案与参考答案之间的覆盖程度。该指标不能完全代表语义正确性，但可以作为批量初筛。第三个指标是响应时间，包括检索耗时、生成耗时和总耗时，用于分析本地模型部署的性能表现。
+
+4.3 实验流程
+
+实验前先运行 python src/build_kb.py 构建知识库。成功后运行 python src/eval.py，脚本会逐条读取 30 个问题，调用本地 RAG 流程生成答案，并把明细结果保存到 results/eval_results.csv，把汇总结果保存到 results/eval_summary.json。报告提交前应根据本机实际运行结果填写检索命中率、平均覆盖度和平均响应时间，并选择若干正确案例与错误案例进行分析。
+
+4.4 结果分析方法
+
+如果检索命中率较低，通常说明问题表达与文档片段语义距离较远，或者 chunk_size 设置不合理。可以尝试增加 Top-K、调整切分长度、补充文档标题和关键词。若检索命中但答案仍然不准确，可能是 Prompt 约束不足、模型能力不足或参考片段包含多个相近概念。可以降低 temperature，强化“不得编造”的指令，或改用更强生成模型。若响应时间过长，通常与模型规模、硬件性能和 Top-K 数量有关，可以使用 qwen2.5:3b 或减少 Top-K。
+
+4.5 提升档优化设计
+
+提升档可以围绕 RAG 策略优化展开。建议进行 Top-K 对比实验，分别设置 Top-K 为 2、4、6，记录检索命中率、答案覆盖度和平均耗时。预期现象是 Top-K 太小可能漏掉答案，Top-K 太大可能引入噪声并增加生成耗时。也可以进行 Prompt 对比实验，将“普通回答 Prompt”与“严格依据资料并引用来源 Prompt”进行比较，观察幻觉率和可追溯性变化。
+
+第五章 总结与展望
+
+本课程设计完成了一个基于 Ollama 的本地计算机专业文档问答系统。系统从任务分析出发，实现了文档解析、文本切分、Embedding 向量化、余弦相似度检索、本地大模型生成、Web 页面展示和 30 条样本批量评测。与简单运行参考教程示例不同，本项目根据端口和依赖要求做了本地化改造，使用 http://localhost:8090 访问 Ollama，并采用 JSON 索引加 scikit-learn 检索的轻量实现，便于说明原理和复现实验。
+
+系统仍存在改进空间。第一，当前知识库规模较小，后续可以加入更多教材章节、课程讲义和论文摘要。第二，JSON 向量索引适合小规模数据，大规模场景应迁移到专业向量数据库。第三，自动评测中的参考答案覆盖度只是近似指标，最终仍需要人工判断答案事实性和表达质量。第四，可以进一步增加模型对比实验，例如比较 qwen2.5:3b、qwen2.5:7b 和 llama3:8b 在准确率与响应时间上的差异。
+
+参考文献
+
+[1] DataWhale. 动手学 Ollama：handy-ollama 在线教程.
+[2] Ollama. Ollama 官方文档与模型管理说明.
+[3] LangChain. LangChain Python Documentation.
+[4] LangChain. langchain-ollama Integration Documentation.
+[5] Streamlit. Streamlit Documentation.
+[6] scikit-learn Developers. scikit-learn User Guide.
+[7] Lewis P., Perez E., Piktus A., et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. 2020.
+[8] Vaswani A., Shazeer N., Parmar N., et al. Attention Is All You Need. 2017.
+[9] Reimers N., Gurevych I. Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. 2019.
+[10] Johnson J., Douze M., Jegou H. Billion-scale similarity search with GPUs. 2017.
+[11] Qwen Team. Qwen Technical Report and Model Documentation.
+
+附录：核心文件说明
+
+src/config.py：集中配置 Ollama 地址、模型名称、路径和 RAG 参数。
+src/build_kb.py：读取 data 目录文档，切分文本，生成 Embedding，保存知识库索引。
+src/rag_chain.py：执行问题向量化、Top-K 检索、Prompt 构造和本地模型生成。
+src/app.py：提供 Streamlit 可视化问答界面，展示答案和引用来源。
+src/eval.py：读取 30 条评测样本，输出评测明细和统计摘要。
+eval_questions.csv：保存问题、参考答案和期望来源。
+README.md：说明环境配置、运行命令和项目结构。
