@@ -6,7 +6,7 @@
 
 - Ollama 通过 Docker Desktop 或本机服务暴露在 `http://localhost:8090`
 - conda 环境：`nlprag`
-- 生成模型：`qwen2.5:7b`
+- 生成模型：`qwen2.5:7b-instruct-q4_K_M`
 - Embedding 模型：`nomic-embed-text`
 
 检查 Ollama 服务：
@@ -26,7 +26,8 @@ pip freeze > requirements.txt
 拉取模型：
 
 ```cmd
-ollama pull qwen2.5:7b
+ollama pull qwen2.5:7b-instruct-q4_K_M
+ollama pull deepseek-r1:7b-qwen-distill-q4_K_M
 ollama pull nomic-embed-text
 ```
 
@@ -55,6 +56,20 @@ streamlit run src/app.py
 ```cmd
 python src/eval.py
 ```
+
+DeepSeek R1 与 Qwen 双模型对比：
+
+```cmd
+python src/model_compare.py
+```
+
+快速抽样对比：
+
+```cmd
+python src/model_compare.py --limit 5
+```
+
+Model compare output: `results/model_compare_results.csv` and `results/model_compare_summary.json`.
 
 评测结果会写入 `results/eval_results.csv` 和 `results/eval_summary.json`。
 

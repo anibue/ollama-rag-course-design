@@ -110,11 +110,11 @@ def format_context(chunks: List[Dict[str, object]]) -> str:
     return "\n\n".join(parts)
 
 
-def generate_with_ollama(prompt: str) -> str:
+def generate_with_ollama(prompt: str, model: str = LLM_MODEL) -> str:
     response = requests.post(
         f"{OLLAMA_BASE_URL}/api/generate",
         json={
-            "model": LLM_MODEL,
+            "model": model,
             "prompt": prompt,
             "stream": False,
             "options": {
@@ -130,7 +130,9 @@ def generate_with_ollama(prompt: str) -> str:
     return payload.get("response", "").strip()
 
 
-def answer_question(question: str, top_k: int = TOP_K) -> Dict[str, object]:
+def answer_question(
+    question: str, top_k: int = TOP_K, model: str = LLM_MODEL
+) -> Dict[str, object]:
     started = time.perf_counter()
     retrieved = retrieve(question, top_k=top_k)
     retrieve_time = time.perf_counter() - started
@@ -138,7 +140,7 @@ def answer_question(question: str, top_k: int = TOP_K) -> Dict[str, object]:
     prompt = PROMPT_TEMPLATE.format(context=format_context(retrieved), question=question)
 
     generate_started = time.perf_counter()
-    answer = generate_with_ollama(prompt)
+    answer = generate_with_ollama(prompt, model=model)
     generate_time = time.perf_counter() - generate_started
 
     return {
@@ -157,7 +159,7 @@ def answer_question(question: str, top_k: int = TOP_K) -> Dict[str, object]:
             for chunk in retrieved
         ],
         "top_k": top_k,
-        "model": LLM_MODEL,
+        "model": model,
         "embedding_model": EMBEDDING_MODEL,
         "ollama_base_url": OLLAMA_BASE_URL,
         "retrieve_time": retrieve_time,

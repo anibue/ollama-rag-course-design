@@ -8,7 +8,11 @@ EVAL_FILE = BASE_DIR / "eval_questions.csv"
 INDEX_FILE = DB_DIR / "knowledge_index.json"
 
 OLLAMA_BASE_URL = "http://localhost:8090"
-LLM_MODEL = "qwen2.5:7b"
+LLM_MODEL = "qwen2.5:7b-instruct-q4_K_M"
+COMPARE_MODELS = [
+    "deepseek-r1:7b-qwen-distill-q4_K_M",
+    "qwen2.5:7b-instruct-q4_K_M",
+]
 EMBEDDING_MODEL = "nomic-embed-text"
 
 CHUNK_SIZE = 420
