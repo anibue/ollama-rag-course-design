@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from config import (
+    DEFAULT_RETRIEVAL_MODE,
     EMBEDDING_MODEL,
     EMBEDDING_SCORE_WEIGHT,
     GENERATE_TIMEOUT,
@@ -19,6 +20,7 @@ from config import (
     NUM_CTX,
     NUM_PREDICT,
     OLLAMA_BASE_URL,
+    RETRIEVAL_MODES,
     TEMPERATURE,
     TOP_K,
 )
@@ -54,7 +56,16 @@ def min_max_normalize(values) -> List[float]:
     return [(float(value) - low) / (high - low) for value in values]
 
 
-def retrieve(question: str, top_k: int = TOP_K) -> List[Dict[str, object]]:
+def retrieve(
+    question: str,
+    top_k: int = TOP_K,
+    mode: str = DEFAULT_RETRIEVAL_MODE,
+) -> List[Dict[str, object]]:
+    if mode not in RETRIEVAL_MODES:
+        raise ValueError(
+            f"Unsupported retrieval mode: {mode}. Expected one of {RETRIEVAL_MODES}"
+        )
+
     index = load_index()
     chunks = index["chunks"]
     texts = [chunk["content"] for chunk in chunks]
@@ -70,13 +81,16 @@ def retrieve(question: str, top_k: int = TOP_K) -> List[Dict[str, object]]:
 
     normalized_embedding_scores = min_max_normalize(embedding_scores)
     normalized_lexical_scores = min_max_normalize(lexical_scores)
-    scores = [
-        EMBEDDING_SCORE_WEIGHT * embedding_score
-        + LEXICAL_SCORE_WEIGHT * lexical_score
-        for embedding_score, lexical_score in zip(
-            normalized_embedding_scores, normalized_lexical_scores
-        )
-    ]
+    if mode == "vector":
+        scores = [float(score) for score in embedding_scores]
+    else:
+        scores = [
+            EMBEDDING_SCORE_WEIGHT * embedding_score
+            + LEXICAL_SCORE_WEIGHT * lexical_score
+            for embedding_score, lexical_score in zip(
+                normalized_embedding_scores, normalized_lexical_scores
+            )
+        ]
 
     ranked = sorted(
         (
@@ -88,6 +102,7 @@ def retrieve(question: str, top_k: int = TOP_K) -> List[Dict[str, object]]:
                 "score": float(score),
                 "embedding_score": float(embedding_score),
                 "lexical_score": float(lexical_score),
+                "retrieval_mode": mode,
             }
             for chunk, score, embedding_score, lexical_score in zip(
                 chunks, scores, embedding_scores, lexical_scores
@@ -131,10 +146,13 @@ def generate_with_ollama(prompt: str, model: str = LLM_MODEL) -> str:
 
 
 def answer_question(
-    question: str, top_k: int = TOP_K, model: str = LLM_MODEL
+    question: str,
+    top_k: int = TOP_K,
+    model: str = LLM_MODEL,
+    retrieval_mode: str = DEFAULT_RETRIEVAL_MODE,
 ) -> Dict[str, object]:
     started = time.perf_counter()
-    retrieved = retrieve(question, top_k=top_k)
+    retrieved = retrieve(question, top_k=top_k, mode=retrieval_mode)
     retrieve_time = time.perf_counter() - started
 
     prompt = PROMPT_TEMPLATE.format(context=format_context(retrieved), question=question)
@@ -160,6 +178,7 @@ def answer_question(
         ],
         "top_k": top_k,
         "model": model,
+        "retrieval_mode": retrieval_mode,
         "embedding_model": EMBEDDING_MODEL,
         "ollama_base_url": OLLAMA_BASE_URL,
         "retrieve_time": retrieve_time,
@@ -172,11 +191,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="命令行 RAG 问答")
     parser.add_argument("--question", "-q", help="要提问的问题")
     parser.add_argument("--top-k", type=int, default=TOP_K, help="检索片段数量")
+    parser.add_argument(
+        "--mode",
+        choices=RETRIEVAL_MODES,
+        default=DEFAULT_RETRIEVAL_MODE,
+        help="检索策略：vector 或 hybrid",
+    )
     parser.add_argument("--json", action="store_true", help="以 JSON 输出完整结果")
     args = parser.parse_args()
 
     question = args.question or input("请输入问题：").strip()
-    result = answer_question(question, top_k=args.top_k)
+    result = answer_question(question, top_k=args.top_k, retrieval_mode=args.mode)
 
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))

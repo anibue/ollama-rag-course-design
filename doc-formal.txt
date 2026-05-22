@@ -50,14 +50,16 @@ python src/build_kb.py
 python src/rag_chain.py --question "虚拟内存的作用是什么？"
 streamlit run src/app.py
 python src/eval.py
+python src/rag_strategy_compare.py
+python src/model_compare.py
 
-其中 build_kb.py 用于构建知识库，rag_chain.py 用于命令行问答，app.py 用于 Web 页面，eval.py 用于批量评测。
+其中 build_kb.py 用于构建知识库，rag_chain.py 用于命令行问答，app.py 用于 Web 页面，eval.py 用于批量评测，rag_strategy_compare.py 用于纯向量检索与混合检索控制实验，model_compare.py 用于双模型对比。
 
 第三章 系统设计与实现
 
 3.1 系统架构
 
-系统由五个模块组成。配置模块 src/config.py 负责维护基础路径、端口、模型名称、切分参数和检索参数。知识库构建模块 src/build_kb.py 负责读取文档、切分文本、调用 Embedding 模型并保存索引。问答模块 src/rag_chain.py 负责加载索引、执行向量检索、构造 Prompt 和调用生成模型。页面模块 src/app.py 提供 Streamlit 交互界面。评测模块 src/eval.py 读取 eval_questions.csv 中的 30 条样本，逐条运行问答并输出结果。
+系统由七个主要模块组成。配置模块 src/config.py 负责维护基础路径、端口、模型名称、切分参数和检索参数。知识库构建模块 src/build_kb.py 负责读取文档、切分文本、调用 Embedding 模型并保存索引。问答模块 src/rag_chain.py 负责加载索引、执行向量检索、构造 Prompt 和调用生成模型。页面模块 src/app.py 提供 Streamlit 交互界面。评测模块 src/eval.py 读取 eval_questions.csv 中的 30 条样本，逐条运行问答并输出结果。rag_strategy_compare.py 用于比较 vector 纯向量检索与 hybrid 混合检索的优化效果，model_compare.py 用于比较 DeepSeek R1 与 Qwen 两个本地模型的问答表现。
 
 3.2 文档解析与文本切分
 
@@ -73,7 +75,7 @@ python src/eval.py
 
 3.4 检索与生成流程
 
-问答阶段首先加载 knowledge_index.json，然后调用 nomic-embed-text 把用户问题转成向量。系统使用 scikit-learn 的 cosine_similarity 计算问题向量与所有文档片段向量之间的余弦相似度，同时使用 TfidfVectorizer 的字符 n-gram 模式计算中文术语匹配分数。最终检索分数由 45% 向量分和 55% 关键词分加权得到，并按分数降序选取 Top-K 个片段。默认 Top-K 为 4。检索结果包含片段内容、来源文件、综合分、向量分和关键词分。
+问答阶段首先加载 knowledge_index.json，然后调用 nomic-embed-text 把用户问题转成向量。系统支持两种检索策略：vector 纯向量检索只按照问题向量与文档片段向量之间的余弦相似度排序，作为优化前基线；hybrid 混合检索同时使用 TfidfVectorizer 的字符 n-gram 模式计算中文术语匹配分数，并将 45% 向量分和 55% 关键词分加权为最终检索分数，作为优化后默认策略。默认 Top-K 为 4。检索结果包含片段内容、来源文件、综合分、向量分和关键词分。
 
 Prompt 设计强调三点约束。第一，模型必须只依据参考资料回答。第二，如果参考资料中没有明确依据，必须回答“知识库中没有找到明确答案”。第三，答案需要给出引用来源，说明依据片段编号和文件名。这样设计是为了降低幻觉风险，并满足课程设计中对结果可解释性的要求。
 
@@ -89,7 +91,7 @@ Prompt 设计强调三点约束。第一，模型必须只依据参考资料回�
 
 4.3 实验流程
 
-实验前先运行 python src/build_kb.py 构建知识库。成功后运行 python src/eval.py，脚本会逐条读取 30 个问题，调用本地 RAG 流程生成答案，并把明细结果保存到 results/eval_results.csv，把汇总结果保存到 results/eval_summary.json。报告提交前应根据本机实际运行结果填写检索命中率、平均覆盖度和平均响应时间，并选择若干正确案例与错误案例进行分析。
+实验前先运行 python src/build_kb.py 构建知识库。成功后运行 python src/eval.py，脚本会逐条读取 30 个问题，调用本地 RAG 流程生成答案，并把明细结果保存到 results/eval_results.csv，把汇总结果保存到 results/eval_summary.json。为了补齐提升档的优化前后控制实验，运行 python src/rag_strategy_compare.py，对同一知识库、同一 30 条问题、同一模型 qwen2.5:7b-instruct-q4_K_M 和同一 Top-K=4 进行对比，只切换 vector 与 hybrid 两种检索策略。对比明细保存到 results/rag_strategy_compare_results.csv，汇总结果保存到 results/rag_strategy_compare_summary.json。
 
 4.4 结果分析方法
 
@@ -97,13 +99,22 @@ Prompt 设计强调三点约束。第一，模型必须只依据参考资料回�
 
 4.5 提升档优化设计
 
-提升档可以围绕 RAG 策略优化展开。建议进行 Top-K 对比实验，分别设置 Top-K 为 2、4、6，记录检索命中率、答案覆盖度和平均耗时。预期现象是 Top-K 太小可能漏掉答案，Top-K 太大可能引入噪声并增加生成耗时。也可以进行 Prompt 对比实验，将“普通回答 Prompt”与“严格依据资料并引用来源 Prompt”进行比较，观察幻觉率和可追溯性变化。
+提升档围绕 RAG 策略优化展开，采用“纯向量检索 vs 混合检索”的控制实验。实验固定知识库、评测问题、生成模型和 Top-K 参数，只改变检索排序方式：vector 只使用 Embedding 余弦相似度，hybrid 使用 0.45 * 向量分 + 0.55 * 字符 n-gram TF-IDF 关键词分。
+
+完整评测结果如下：
+
+| 检索策略 | 样本数 | 成功率 | 检索命中率 | 平均参考答案覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| vector | 30 | 1.0000 | 0.7667 | 0.4058 | 0.4444s | 137.7124s | 138.1570s |
+| hybrid | 30 | 1.0000 | 1.0000 | 0.5948 | 0.2312s | 129.4322s | 129.6635s |
+
+从结果看，hybrid 混合检索把检索命中率从 0.7667 提升到 1.0000，平均参考答案覆盖度从 0.4058 提升到 0.5948，说明关键词匹配对中文专业术语问题有明显补充作用。平均总耗时从 138.1570s 降至 129.6635s，主要原因是更准确的上下文减少了模型在无关片段上展开解释的倾向。该实验形成了明确的优化前后对照，可以作为提升档 RAG 优化证据。
 
 第五章 总结与展望
 
 本课程设计完成了一个基于 Ollama 的本地计算机专业文档问答系统。系统从任务分析出发，实现了文档解析、文本切分、Embedding 向量化、余弦相似度检索、本地大模型生成、Web 页面展示和 30 条样本批量评测。与简单运行参考教程示例不同，本项目根据端口和依赖要求做了本地化改造，使用 http://localhost:8090 访问 Ollama，并采用 JSON 索引加 scikit-learn 检索的轻量实现，便于说明原理和复现实验。
 
-系统仍存在改进空间。第一，当前知识库规模较小，后续可以加入更多教材章节、课程讲义和论文摘要。第二，JSON 向量索引适合小规模数据，大规模场景应迁移到专业向量数据库。第三，自动评测中的参考答案覆盖度只是近似指标，最终仍需要人工判断答案事实性和表达质量。第四，当前已增加 DeepSeek R1 与 Qwen 双模型对比模块，可比较 deepseek-r1:7b-qwen-distill-q4_K_M 和 qwen2.5:7b-instruct-q4_K_M 在成功率、参考答案覆盖度、检索命中率和响应时间上的差异。
+系统仍存在改进空间。第一，当前知识库规模较小，后续可以加入更多教材章节、课程讲义和论文摘要。第二，JSON 向量索引适合小规模数据，大规模场景应迁移到专业向量数据库。第三，自动评测中的参考答案覆盖度只是近似指标，最终仍需要人工判断答案事实性和表达质量。第四，当前已增加纯向量检索与混合检索控制实验，证明 hybrid 检索相对 vector 基线能提升检索命中率和参考答案覆盖度；同时已增加 DeepSeek R1 与 Qwen 双模型对比模块，可比较 deepseek-r1:7b-qwen-distill-q4_K_M 和 qwen2.5:7b-instruct-q4_K_M 在成功率、参考答案覆盖度、检索命中率和响应时间上的差异。
 
 参考文献
 
@@ -126,5 +137,6 @@ src/build_kb.py：读取 data 目录文档，切分文本，生成 Embedding，�
 src/rag_chain.py：执行问题向量化、Top-K 检索、Prompt 构造和本地模型生成。
 src/app.py：提供 Streamlit 可视化问答界面，展示答案和引用来源。
 src/eval.py：读取 30 条评测样本，输出评测明细和统计摘要。
+src/rag_strategy_compare.py：执行纯向量检索与混合检索的优化前后控制实验。
 eval_questions.csv：保存问题、参考答案和期望来源。
 README.md：说明环境配置、运行命令和项目结构。

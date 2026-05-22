@@ -1,0 +1,38 @@
+{
+  "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
+  "question_count": 30,
+  "top_k": 4,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "modes": [
+    "vector",
+    "hybrid"
+  ],
+  "default_retrieval_mode": "hybrid",
+  "mode_summaries": [
+    {
+      "retrieval_mode": "vector",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 30,
+      "success_count": 30,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 0.7667,
+      "average_reference_overlap": 0.4058,
+      "average_retrieve_time": 0.4444,
+      "average_generate_time": 137.7124,
+      "average_total_time": 138.157
+    },
+    {
+      "retrieval_mode": "hybrid",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 30,
+      "success_count": 30,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.5948,
+      "average_retrieve_time": 0.2312,
+      "average_generate_time": 129.4322,
+      "average_total_time": 129.6635
+    }
+  ],
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\rag_strategy_compare_results.csv"
+}
