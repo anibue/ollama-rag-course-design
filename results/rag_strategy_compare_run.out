@@ -1,5 +1,5 @@
 
-=== Model: deepseek-r1:7b-qwen-distill-q4_K_M ===
+=== Retrieval mode: vector ===
 [1/30] 计算机网络采用分层体系结构的主要意义是什么？
 [2/30] OSI 参考模型包含哪些层？
 [3/30] TCP 为什么适合文件传输和网页访问？
@@ -31,7 +31,7 @@
 [29/30] 专业文档问答的 Prompt 为什么要要求拒绝编造？
 [30/30] 影响 RAG 最终效果的关键因素有哪些？
 
-=== Model: qwen2.5:7b-instruct-q4_K_M ===
+=== Retrieval mode: hybrid ===
 [1/30] 计算机网络采用分层体系结构的主要意义是什么？
 [2/30] OSI 参考模型包含哪些层？
 [3/30] TCP 为什么适合文件传输和网页访问？
@@ -66,33 +66,37 @@
   "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
   "question_count": 30,
   "top_k": 4,
-  "models": [
-    "deepseek-r1:7b-qwen-distill-q4_K_M",
-    "qwen2.5:7b-instruct-q4_K_M"
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "modes": [
+    "vector",
+    "hybrid"
   ],
-  "model_summaries": [
+  "default_retrieval_mode": "hybrid",
+  "mode_summaries": [
     {
-      "model": "deepseek-r1:7b-qwen-distill-q4_K_M",
+      "retrieval_mode": "vector",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
       "sample_count": 30,
       "success_count": 30,
       "success_rate": 1.0,
-      "retrieval_hit_rate": 1.0,
-      "average_reference_overlap": 0.4765,
-      "average_retrieve_time": 0.4563,
-      "average_generate_time": 165.003,
-      "average_total_time": 165.4594
+      "retrieval_hit_rate": 0.7,
+      "average_reference_overlap": 0.4076,
+      "average_retrieve_time": 0.4339,
+      "average_generate_time": 123.1658,
+      "average_total_time": 123.5998
     },
     {
+      "retrieval_mode": "hybrid",
       "model": "qwen2.5:7b-instruct-q4_K_M",
       "sample_count": 30,
       "success_count": 30,
       "success_rate": 1.0,
       "retrieval_hit_rate": 1.0,
-      "average_reference_overlap": 0.6205,
-      "average_retrieve_time": 0.4582,
-      "average_generate_time": 138.71,
-      "average_total_time": 139.1683
+      "average_reference_overlap": 0.6185,
+      "average_retrieve_time": 0.4084,
+      "average_generate_time": 137.9988,
+      "average_total_time": 138.4073
     }
   ],
-  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\model_compare_results.csv"
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\rag_strategy_compare_results.csv"
 }

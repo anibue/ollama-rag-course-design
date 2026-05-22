@@ -13,10 +13,10 @@
       "success_count": 30,
       "success_rate": 1.0,
       "retrieval_hit_rate": 1.0,
-      "average_reference_overlap": 0.4324,
-      "average_retrieve_time": 0.3494,
-      "average_generate_time": 170.8529,
-      "average_total_time": 171.2024
+      "average_reference_overlap": 0.4765,
+      "average_retrieve_time": 0.4563,
+      "average_generate_time": 165.003,
+      "average_total_time": 165.4594
     },
     {
       "model": "qwen2.5:7b-instruct-q4_K_M",
@@ -24,10 +24,10 @@
       "success_count": 30,
       "success_rate": 1.0,
       "retrieval_hit_rate": 1.0,
-      "average_reference_overlap": 0.5746,
-      "average_retrieve_time": 0.3152,
-      "average_generate_time": 142.9863,
-      "average_total_time": 143.3015
+      "average_reference_overlap": 0.6205,
+      "average_retrieve_time": 0.4582,
+      "average_generate_time": 138.71,
+      "average_total_time": 139.1683
     }
   ],
   "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\model_compare_results.csv"

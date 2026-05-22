@@ -15,11 +15,11 @@
       "sample_count": 30,
       "success_count": 30,
       "success_rate": 1.0,
-      "retrieval_hit_rate": 0.7667,
-      "average_reference_overlap": 0.4058,
-      "average_retrieve_time": 0.4444,
-      "average_generate_time": 137.7124,
-      "average_total_time": 138.157
+      "retrieval_hit_rate": 0.7,
+      "average_reference_overlap": 0.4076,
+      "average_retrieve_time": 0.4339,
+      "average_generate_time": 123.1658,
+      "average_total_time": 123.5998
     },
     {
       "retrieval_mode": "hybrid",
@@ -28,10 +28,10 @@
       "success_count": 30,
       "success_rate": 1.0,
       "retrieval_hit_rate": 1.0,
-      "average_reference_overlap": 0.5948,
-      "average_retrieve_time": 0.2312,
-      "average_generate_time": 129.4322,
-      "average_total_time": 129.6635
+      "average_reference_overlap": 0.6185,
+      "average_retrieve_time": 0.4084,
+      "average_generate_time": 137.9988,
+      "average_total_time": 138.4073
     }
   ],
   "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\rag_strategy_compare_results.csv"

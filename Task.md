@@ -192,25 +192,47 @@ python -m py_compile src\config.py src\collect_public_kb.py src\build_kb.py src\
 
 已有对比结果：
 
-`results/rag_strategy_compare_summary.json` 显示：
+首次完整实验结果中，`results/rag_strategy_compare_summary.json` 显示：
 
 | 检索策略 | 样本数 | 成功率 | 检索命中率 | 平均参考答案覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | vector | 30 | 1.0000 | 0.7667 | 0.4058 | 0.4444s | 137.7124s | 138.1570s |
 | hybrid | 30 | 1.0000 | 1.0000 | 0.5948 | 0.2312s | 129.4322s | 129.6635s |
 
-`results/model_compare_summary.json` 显示：
+重新完整流程实验结果（2026-05-23）中，`results/rag_strategy_compare_summary.json` 显示：
+
+| 检索策略 | 样本数 | 成功率 | 检索命中率 | 平均参考答案覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| vector | 30 | 1.0000 | 0.7000 | 0.4076 | 0.4339s | 123.1658s | 123.5998s |
+| hybrid | 30 | 1.0000 | 1.0000 | 0.6185 | 0.4084s | 137.9988s | 138.4073s |
+
+单模型重新完整流程实验结果（2026-05-23）中，`results/eval_summary.json` 显示：
+
+| 样本数 | Top-K | 检索命中率 | 平均参考答案覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---:|---:|---:|---:|---:|---:|---:|
+| 30 | 4 | 1.0000 | 0.6143 | 0.4019s | 135.2647s | 135.6667s |
+
+首次完整实验结果中，`results/model_compare_summary.json` 显示：
 
 | 模型 | 样本数 | 成功数 | 成功率 | 检索命中率 | 平均参考答案覆盖度 | 平均总耗时 |
 |---|---:|---:|---:|---:|---:|---:|
 | deepseek-r1:7b-qwen-distill-q4_K_M | 30 | 30 | 1.0 | 1.0 | 0.4324 | 171.2024s |
 | qwen2.5:7b-instruct-q4_K_M | 30 | 30 | 1.0 | 1.0 | 0.5746 | 143.3015s |
 
+重新完整流程实验结果（2026-05-23）中，`results/model_compare_summary.json` 显示：
+
+| 模型 | 样本数 | 成功数 | 成功率 | 检索命中率 | 平均参考答案覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| deepseek-r1:7b-qwen-distill-q4_K_M | 30 | 30 | 1.0000 | 1.0000 | 0.4765 | 0.4563s | 165.0030s | 165.4594s |
+| qwen2.5:7b-instruct-q4_K_M | 30 | 30 | 1.0000 | 1.0000 | 0.6205 | 0.4582s | 138.7100s | 139.1683s |
+
 效果结论：
 
 - `hybrid` 相比 `vector` 将检索命中率从 0.7667 提升到 1.0000。
 - 平均参考答案覆盖度从 0.4058 提升到 0.5948。
 - 平均总耗时从 138.1570s 降至 129.6635s。
+- 2026-05-23 重新完整流程实验中，`hybrid` 相比 `vector` 的检索命中率从 0.7000 提升到 1.0000，平均参考答案覆盖度从 0.4076 提升到 0.6185。
+- 两组数据差异来自本地生成模型非确定性、运行环境负载和推理耗时波动，不影响控制变量设置。
 
 提升档结论：已补齐明确的优化前后控制实验，可支撑 RAG 策略优化材料。
 
@@ -240,6 +262,8 @@ python -m py_compile src\config.py src\collect_public_kb.py src\build_kb.py src\
 - 两个模型检索命中率均为 1.0。
 - Qwen 平均参考答案覆盖度更高：0.5746，高于 DeepSeek R1 的 0.4324。
 - Qwen 平均总耗时更短：143.3015s，短于 DeepSeek R1 的 171.2024s。
+- 2026-05-23 重新完整流程实验中，Qwen 平均参考答案覆盖度为 0.6205，高于 DeepSeek R1 的 0.4765。
+- 2026-05-23 重新完整流程实验中，Qwen 平均总耗时为 139.1683s，短于 DeepSeek R1 的 165.4594s。
 
 挑战任务结论：
 
@@ -250,11 +274,12 @@ python -m py_compile src\config.py src\collect_public_kb.py src\build_kb.py src\
 
 ### 必须注意
 
-1. `results/eval_results.csv` 和 `results/eval_summary.json` 当前不存在。
-2. 但 `results/model_compare_results.csv` 已包含双模型各 30 条评测结果，可以替代证明 30 条评测已跑通。
+1. `results/eval_results.csv` 和 `results/eval_summary.json` 已在 2026-05-23 重新完整流程实验中生成。
+2. `results/model_compare_results.csv` 已包含双模型各 30 条评测结果。
 3. 提升档优化前后控制实验已经补齐，结果保存在 `results/rag_strategy_compare_results.csv` 和 `results/rag_strategy_compare_summary.json`。
-4. 公开知识库采集脚本已经补充，且公开材料已经进入当前索引；如果后续需要刷新公开材料或扩大样本，再运行 `python src/collect_public_kb.py` 和 `python src/build_kb.py`。
-5. 重新运行 `python src/build_kb.py` 会覆盖 `chroma_db/knowledge_index.json`，属于正常重建行为。
+4. 文档中保留首次完整实验结果，并追加 2026-05-23 重新完整流程实验结果，便于展示两组复现实验数据。
+5. 公开知识库采集脚本已经补充，且公开材料已经进入当前索引；如果后续需要刷新公开材料或扩大样本，再运行 `python src/collect_public_kb.py` 和 `python src/build_kb.py`。
+6. 重新运行 `python src/build_kb.py` 会覆盖 `chroma_db/knowledge_index.json`，属于正常重建行为。
 
 ### 可选补充
 

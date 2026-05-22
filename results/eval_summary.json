@@ -1,0 +1,10 @@
+{
+  "sample_count": 30,
+  "top_k": 4,
+  "retrieval_hit_rate": 1,
+  "average_reference_overlap": 0.6143,
+  "average_retrieve_time": 0.4019,
+  "average_generate_time": 135.2647,
+  "average_total_time": 135.6667,
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\eval_results.csv"
+}
