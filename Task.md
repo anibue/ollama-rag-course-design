@@ -5,7 +5,7 @@
 
 ## 一、总体结论
 
-当前项目已经完成基础档、进阶层和提升档的主要要求，并且具备加分挑战所需的模型对比材料。
+当前项目已经完成基础档、进阶层和提升档的主要要求，并且具备加分挑战所需的模型对比材料；同时已补充公开数据集和计算机领域论文材料作为可追溯原始知识库来源。
 
 按现有文件证据判断：
 
@@ -28,7 +28,7 @@
 
 已记录内容：
 
-- Ollama API 地址：`http://localhost:8090`
+- Ollama API 地址：`http://127.0.0.1:8090`
 - Docker Desktop 端口映射：`8090:11434`
 - Python conda 环境：`nlprag`
 - 生成模型：`qwen2.5:7b-instruct-q4_K_M`
@@ -38,7 +38,7 @@
 相关命令已在 `README.md` 和 `doc-formal.txt` 中说明：
 
 ```cmd
-curl http://localhost:8090/api/tags
+curl http://127.0.0.1:8090/api/tags
 conda activate nlprag
 pip install -r requirements.txt
 ollama pull qwen2.5:7b-instruct-q4_K_M
@@ -78,6 +78,7 @@ ollama pull nomic-embed-text
 核心实现文件：
 
 - `src/build_kb.py`：读取文档、切分文本、生成 Embedding、构建索引。
+- `src/collect_public_kb.py`：采集公开 CSE 数据集和 arXiv 计算机论文摘要。
 - `src/rag_chain.py`：检索、Prompt 拼接、调用 Ollama 生成答案。
 - `src/app.py`：Streamlit Web 问答页面。
 - `src/eval.py`：批量评测脚本。
@@ -87,12 +88,12 @@ ollama pull nomic-embed-text
 
 - 原始知识库文档：`data/`
 - 知识库索引：`chroma_db/knowledge_index.json`
-- 当前索引统计：4 份文档，10 个 chunk，Embedding 模型为 `nomic-embed-text`。
+- 当前基础知识库包含 4 份自建文档；公开材料可通过 `python src/collect_public_kb.py` 写入 `data/public_kb/` 后重新构建索引。
 
 已执行的代码语法核验：
 
 ```cmd
-python -m py_compile src\config.py src\build_kb.py src\rag_chain.py src\eval.py src\model_compare.py src\app.py
+python -m py_compile src\config.py src\collect_public_kb.py src\build_kb.py src\rag_chain.py src\eval.py src\model_compare.py src\app.py
 ```
 
 结果：通过，无语法错误。
@@ -149,8 +150,9 @@ python -m py_compile src\config.py src\build_kb.py src\rag_chain.py src\eval.py 
 
 说明：
 
-- 当前样本是项目内自建评测集，不是公开数据集。
-- 课程要求写的是“优先使用公开数据集”，不是强制，因此 30 条自建样本可以支撑进阶层评测，但报告中应说明样本来源和局限性。
+- 当前 30 条评测样本是项目内自建评测集，用于保证与原有知识库问题严格对应。
+- 原始知识库已补充公开来源：Hugging Face `hatakekksheeshh/CSE_course_RAG`、`CCRss/arXiv_dataset` 和 arXiv Computer Science 论文摘要。
+- 公开材料的来源、许可、URL 和输出路径会记录在 `data/public_kb/manifest.json`，满足可追溯要求。
 
 ### 2. 技术分析
 
@@ -250,6 +252,7 @@ python -m py_compile src\config.py src\build_kb.py src\rag_chain.py src\eval.py 
 1. `results/eval_results.csv` 和 `results/eval_summary.json` 当前不存在。
 2. 但 `results/model_compare_results.csv` 已包含双模型各 30 条评测结果，可以替代证明 30 条评测已跑通。
 3. 提升档优化前后控制实验已经补齐，结果保存在 `results/rag_strategy_compare_results.csv` 和 `results/rag_strategy_compare_summary.json`。
+4. 公开知识库采集脚本已经补充；若要让公开材料进入当前索引，需要先运行 `python src/collect_public_kb.py`，再运行 `python src/build_kb.py`。
 
 ### 建议优先补充
 

@@ -1,0 +1,449 @@
+{
+  "created_at": "2026-05-22T16:19:24",
+  "output_dir": "data\\public_kb",
+  "sources": [
+    {
+      "name": "hatakekksheeshh/CSE_course_RAG",
+      "type": "Hugging Face dataset",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG",
+      "license": "MIT"
+    },
+    {
+      "name": "CCRss/arXiv_dataset",
+      "type": "Hugging Face dataset",
+      "url": "https://huggingface.co/datasets/CCRss/arXiv_dataset",
+      "license": "CC0-1.0 metadata"
+    },
+    {
+      "name": "arXiv Computer Science",
+      "type": "paper metadata and optional PDF source",
+      "url": "https://arxiv.org/archive/cs",
+      "license": "Per-paper arXiv license"
+    }
+  ],
+  "parameters": {
+    "max_cse": 50,
+    "max_arxiv": 20,
+    "download_pdf": false,
+    "categories": [
+      "cs.AI",
+      "cs.CL",
+      "cs.DB",
+      "cs.NI",
+      "cs.OS",
+      "cs.LG"
+    ]
+  },
+  "documents": [
+    {
+      "title": "CSE Course RAG Dataset",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_001_cse-course-rag-dataset.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Dataset Description",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_002_dataset-description.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Dataset Structure",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_003_dataset-structure.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Supported Tasks",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_004_supported-tasks.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Dataset Size",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_005_dataset-size.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Data Processing",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_006_data-processing.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Data Fields",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_007_data-fields.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Download the Dataset",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_008_download-the-dataset.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Using with RAG Systems",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_009_using-with-rag-systems.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Loading FAISS Indices",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_010_loading-faiss-indices.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Processing Raw Data",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_011_processing-raw-data.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Dataset Statistics",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_012_dataset-statistics.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Evaluation",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_013_evaluation.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Limitations",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_014_limitations.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Citation",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_015_citation.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "License",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_016_license.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Acknowledgments",
+      "source": "hatakekksheeshh/CSE_course_RAG",
+      "source_type": "huggingface_dataset",
+      "license": "MIT",
+      "url": "https://huggingface.co/datasets/hatakekksheeshh/CSE_course_RAG/resolve/main/README.md",
+      "output_path": "data\\public_kb\\cse_course_rag\\cse_017_acknowledgments.md",
+      "collected_at": "2026-05-22T16:19:08",
+      "original_path": "README.md"
+    },
+    {
+      "title": "Tokenisation via Convex Relaxations",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22821v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_001_2605.22821v1.md",
+      "collected_at": "2026-05-22T16:19:20",
+      "arxiv_id": "2605.22821v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22821v1"
+    },
+    {
+      "title": "Integrable Elasticity via Neural Demand Potentials",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22820v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_002_2605.22820v1.md",
+      "collected_at": "2026-05-22T16:19:20",
+      "arxiv_id": "2605.22820v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22820v1"
+    },
+    {
+      "title": "Vector Policy Optimization: Training for Diversity Improves Test-Time Search",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22817v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_003_2605.22817v1.md",
+      "collected_at": "2026-05-22T16:19:21",
+      "arxiv_id": "2605.22817v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22817v1"
+    },
+    {
+      "title": "Remember to be Curious: Episodic Context and Persistent Worlds for 3D Exploration",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22814v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_004_2605.22814v1.md",
+      "collected_at": "2026-05-22T16:19:21",
+      "arxiv_id": "2605.22814v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22814v1"
+    },
+    {
+      "title": "GS-QA: A Benchmark for Geospatial Question Answering",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22811v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_005_2605.22811v1.md",
+      "collected_at": "2026-05-22T16:19:21",
+      "arxiv_id": "2605.22811v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22811v1"
+    },
+    {
+      "title": "The Matching Principle: A Geometric Theory of Loss Functions for Nuisance-Robust Representation Learning",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22800v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_006_2605.22800v1.md",
+      "collected_at": "2026-05-22T16:19:21",
+      "arxiv_id": "2605.22800v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22800v1"
+    },
+    {
+      "title": "Finite-Particle Convergence Rates for Conservative and Non-Conservative Drifting Models",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22795v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_007_2605.22795v1.md",
+      "collected_at": "2026-05-22T16:19:21",
+      "arxiv_id": "2605.22795v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22795v1"
+    },
+    {
+      "title": "MOSS: Self-Evolution through Source-Level Rewriting in Autonomous Agent Systems",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22794v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_008_2605.22794v1.md",
+      "collected_at": "2026-05-22T16:19:22",
+      "arxiv_id": "2605.22794v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22794v1"
+    },
+    {
+      "title": "Gated DeltaNet-2: Decoupling Erase and Write in Linear Attention",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22791v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_009_2605.22791v1.md",
+      "collected_at": "2026-05-22T16:19:22",
+      "arxiv_id": "2605.22791v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22791v1"
+    },
+    {
+      "title": "LCGuard: Latent Communication Guard for Safe KV Sharing in Multi-Agent Systems",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22786v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_010_2605.22786v1.md",
+      "collected_at": "2026-05-22T16:19:22",
+      "arxiv_id": "2605.22786v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22786v1"
+    },
+    {
+      "title": "Evaluating Commercial AI Chatbots as News Intermediaries",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22785v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_011_2605.22785v1.md",
+      "collected_at": "2026-05-22T16:19:22",
+      "arxiv_id": "2605.22785v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22785v1"
+    },
+    {
+      "title": "DeltaBox: Scaling Stateful AI Agents with Millisecond-Level Sandbox Checkpoint/Rollback",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22781v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_012_2605.22781v1.md",
+      "collected_at": "2026-05-22T16:19:22",
+      "arxiv_id": "2605.22781v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22781v1"
+    },
+    {
+      "title": "FAME: Failure-Aware Mixture-of-Experts for Message-Level Log Anomaly Detection",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22779v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_013_2605.22779v1.md",
+      "collected_at": "2026-05-22T16:19:23",
+      "arxiv_id": "2605.22779v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22779v1"
+    },
+    {
+      "title": "SDPM: Survival Diffusion Probabilistic Model for Continuous-Time Survival Analysis",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22776v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_014_2605.22776v1.md",
+      "collected_at": "2026-05-22T16:19:23",
+      "arxiv_id": "2605.22776v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22776v1"
+    },
+    {
+      "title": "MambaGaze: Bidirectional Mamba with Explicit Missing Data Modeling for Cognitive Load Assessment from Eye-Gaze Tracking Data",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22775v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_015_2605.22775v1.md",
+      "collected_at": "2026-05-22T16:19:23",
+      "arxiv_id": "2605.22775v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22775v1"
+    },
+    {
+      "title": "CogAdapt: Transferring Clinical ECG Foundation Models to Wearable Cognitive Load Assessment via Lead Adaptation",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22774v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_016_2605.22774v1.md",
+      "collected_at": "2026-05-22T16:19:23",
+      "arxiv_id": "2605.22774v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22774v1"
+    },
+    {
+      "title": "Deep Reinforcement Learning for Flexible Job Shop Scheduling with Random Job Arrivals",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22773v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_017_2605.22773v1.md",
+      "collected_at": "2026-05-22T16:19:23",
+      "arxiv_id": "2605.22773v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22773v1"
+    },
+    {
+      "title": "Reducing Political Manipulation with Consistency Training",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22771v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_018_2605.22771v1.md",
+      "collected_at": "2026-05-22T16:19:24",
+      "arxiv_id": "2605.22771v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22771v1"
+    },
+    {
+      "title": "Understanding Data Temporality Impact on Large Language Models Pre-training",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22769v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_019_2605.22769v1.md",
+      "collected_at": "2026-05-22T16:19:24",
+      "arxiv_id": "2605.22769v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22769v1"
+    },
+    {
+      "title": "Uniform Diffusion Models Revisited: Leave-One-Out Denoiser and Absorbing State Reformulation",
+      "source": "arXiv API",
+      "source_type": "arxiv_api",
+      "license": "See arXiv record",
+      "url": "https://arxiv.org/abs/2605.22765v1",
+      "output_path": "data\\public_kb\\arxiv\\arxiv_020_2605.22765v1.md",
+      "collected_at": "2026-05-22T16:19:24",
+      "arxiv_id": "2605.22765v1",
+      "categories": "cs.AI cs.CL cs.DB cs.NI cs.OS cs.LG",
+      "pdf_url": "https://arxiv.org/pdf/2605.22765v1"
+    }
+  ]
+}

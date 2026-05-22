@@ -4,7 +4,7 @@
 
 ## 环境要求
 
-- Ollama 通过 Docker Desktop 或本机服务暴露在 `http://localhost:8090`
+- Ollama 通过 Docker Desktop 或本机服务暴露在 `http://127.0.0.1:8090`
 - conda 环境：`nlprag`
 - 生成模型：`qwen2.5:7b-instruct-q4_K_M`
 - Embedding 模型：`nomic-embed-text`
@@ -12,7 +12,7 @@
 检查 Ollama 服务：
 
 ```cmd
-curl http://localhost:8090/api/tags
+curl http://127.0.0.1:8090/api/tags
 ```
 
 安装依赖：
@@ -32,6 +32,24 @@ ollama pull nomic-embed-text
 ```
 
 ## 运行步骤
+
+采集公开知识库材料（可选，默认写入 `data/public_kb/`）：
+
+```cmd
+python src/collect_public_kb.py
+```
+
+快速抽样采集：
+
+```cmd
+python src/collect_public_kb.py --max-arxiv 3 --max-cse 3
+```
+
+如需保存少量论文 PDF，可显式开启：
+
+```cmd
+python src/collect_public_kb.py --max-arxiv 20 --download-pdf
+```
 
 构建知识库：
 
@@ -98,9 +116,11 @@ Strategy compare output: `results/rag_strategy_compare_results.csv` and `results
 
 ```text
 data/                 计算机专业知识库文档
+data/public_kb/       公开 CSE 数据集与 arXiv 论文摘要采集结果
 chroma_db/            本项目沿用目录名，保存 knowledge_index.json
 results/              评测输出
 src/config.py         模型、端口、路径与 RAG 参数
+src/collect_public_kb.py  公开知识库小样本采集脚本
 src/build_kb.py       文档解析、切分、Embedding 与索引构建
 src/rag_chain.py      检索、Prompt 拼接与 Ollama 生成
 src/app.py            Streamlit 问答页面
@@ -111,5 +131,7 @@ doc-formal.txt        课程设计报告草稿
 ```
 
 ## 设计说明
+
+知识库来源由两部分组成：一是项目内自建的计算机网络、操作系统、数据库和 RAG Markdown 文档；二是可复现采集的公开材料。公开材料默认来自 Hugging Face `hatakekksheeshh/CSE_course_RAG`（MIT License）和 `CCRss/arXiv_dataset`（CC0 元数据），并补充 arXiv Computer Science 论文摘要链接。采集脚本只抽取轻量小样本并生成 Markdown，同时把来源、许可、URL 和输出文件写入 `data/public_kb/manifest.json`，避免下载全量 6GB 级数据集导致仓库过大。
 
 本实现没有照搬参考文档中的 ChromaDB 流程，而是用 JSON 保存向量索引，并用 `scikit-learn` 的 `cosine_similarity` 完成检索。系统保留 `vector` 纯向量检索作为优化前基线，并以 `hybrid` 混合检索作为默认策略；混合检索分数由 Ollama Embedding 相似度和字符级 TF-IDF 相似度加权得到，兼顾语义召回与中文专业术语匹配。这样依赖更少，便于解释课程设计中的文档解析、切分、向量化、检索和生成链路。

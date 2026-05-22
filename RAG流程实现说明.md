@@ -209,7 +209,7 @@ chunks.append(
 Embedding 模型配置在 `src/config.py`：
 
 ```python
-OLLAMA_BASE_URL = "http://localhost:8090"
+OLLAMA_BASE_URL = "http://127.0.0.1:8090"
 EMBEDDING_MODEL = "nomic-embed-text"
 ```
 

@@ -3,3 +3,5 @@ __pycache__/
 *.log
 ~$*
 .streamlit/
+.playwright-mcp/
+data/public_kb/papers/*.pdf

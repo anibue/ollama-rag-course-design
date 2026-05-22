@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -7,7 +8,20 @@ RESULT_DIR = BASE_DIR / "results"
 EVAL_FILE = BASE_DIR / "eval_questions.csv"
 INDEX_FILE = DB_DIR / "knowledge_index.json"
 
-OLLAMA_BASE_URL = "http://localhost:8090"
+OLLAMA_BASE_URL = "http://127.0.0.1:8090"
+
+LOCAL_NO_PROXY_HOSTS = ["127.0.0.1", "localhost"]
+existing_no_proxy = os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or ""
+no_proxy_hosts = [
+    host.strip()
+    for host in existing_no_proxy.split(",")
+    if host.strip()
+]
+for host in LOCAL_NO_PROXY_HOSTS:
+    if host not in no_proxy_hosts:
+        no_proxy_hosts.append(host)
+os.environ["NO_PROXY"] = ",".join(no_proxy_hosts)
+os.environ["no_proxy"] = os.environ["NO_PROXY"]
 LLM_MODEL = "qwen2.5:7b-instruct-q4_K_M"
 COMPARE_MODELS = [
     "deepseek-r1:7b-qwen-distill-q4_K_M",
