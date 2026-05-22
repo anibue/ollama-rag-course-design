@@ -88,7 +88,8 @@ ollama pull nomic-embed-text
 
 - 原始知识库文档：`data/`
 - 知识库索引：`chroma_db/knowledge_index.json`
-- 当前基础知识库包含 4 份自建文档；公开材料可通过 `python src/collect_public_kb.py` 写入 `data/public_kb/` 后重新构建索引。
+- 当前索引已经包含自建文档和公开材料，`chroma_db/knowledge_index.json` 中记录 `document_count=41`、`chunk_count=163`。
+- 公开材料已保存在 `data/public_kb/`，来源、许可、URL 和本地输出路径见 `data/public_kb/manifest.json`。
 
 已执行的代码语法核验：
 
@@ -245,18 +246,19 @@ python -m py_compile src\config.py src\collect_public_kb.py src\build_kb.py src\
 - “模型对比”材料已经完成。
 - 提升档中的优化前后对比实验已经补齐，模型对比可作为加分挑战材料。
 
-## 六、当前缺口清单
+## 六、当前注意事项
 
 ### 必须注意
 
 1. `results/eval_results.csv` 和 `results/eval_summary.json` 当前不存在。
 2. 但 `results/model_compare_results.csv` 已包含双模型各 30 条评测结果，可以替代证明 30 条评测已跑通。
 3. 提升档优化前后控制实验已经补齐，结果保存在 `results/rag_strategy_compare_results.csv` 和 `results/rag_strategy_compare_summary.json`。
-4. 公开知识库采集脚本已经补充；若要让公开材料进入当前索引，需要先运行 `python src/collect_public_kb.py`，再运行 `python src/build_kb.py`。
+4. 公开知识库采集脚本已经补充，且公开材料已经进入当前索引；如果后续需要刷新公开材料或扩大样本，再运行 `python src/collect_public_kb.py` 和 `python src/build_kb.py`。
+5. 重新运行 `python src/build_kb.py` 会覆盖 `chroma_db/knowledge_index.json`，属于正常重建行为。
 
-### 建议优先补充
+### 可选补充
 
-1. 运行或补充普通单模型评测输出：
+1. 如需单模型独立评测结果，可运行：
 
 ```cmd
 python src/eval.py

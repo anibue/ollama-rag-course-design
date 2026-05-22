@@ -10,6 +10,7 @@
 
 ```text
 data/ 原始文档
+  -> src/collect_public_kb.py 可选采集公开 CSE 数据集与 arXiv 论文摘要
   -> src/build_kb.py 解析文档、切分片段、生成 Embedding
   -> chroma_db/knowledge_index.json 保存片段、元数据和向量
   -> src/rag_chain.py 对用户问题做向量化和混合相似度检索
@@ -19,6 +20,8 @@ data/ 原始文档
 ```
 
 需要注意：项目目录名使用了 `chroma_db/`，但当前代码没有调用 ChromaDB 客户端。实际向量索引保存在 `chroma_db/knowledge_index.json` 中，检索时由代码读取 JSON 并使用 `sklearn.metrics.pairwise.cosine_similarity` 计算相似度。
+
+当前本地 `data/public_kb/` 已经保存公开知识库材料，来源、许可和 URL 记录在 `data/public_kb/manifest.json`。因此，除非需要刷新公开材料或扩大采样规模，否则可以直接使用当前索引运行问答和评测。
 
 ## 一、文档解析与文本分割体现在哪
 
@@ -267,14 +270,14 @@ INDEX_FILE.write_text(json.dumps(index, ensure_ascii=False, indent=2), encoding=
 当前已有索引中可以看到：
 
 ```text
-document_count = 4
-chunk_count = 10
+document_count = 41
+chunk_count = 163
 embedding_model = nomic-embed-text
 chunk_size = 420
 chunk_overlap = 80
 ```
 
-这说明当前知识库由 4 份原始文档构建，最终切分出 10 个可检索片段。
+这说明当前知识库已经包含 4 份自建计算机专业资料和 37 份公开采集材料，最终切分出 163 个可检索片段。
 
 ### 4. 加载索引
 
@@ -608,6 +611,7 @@ result = answer_question(question.strip(), top_k=top_k)
 
 | RAG 环节 | 当前项目中的体现 | 主要文件/函数 | 关键产物 |
 | --- | --- | --- | --- |
+| 公开材料采集 | 从 Hugging Face CSE 数据集和 arXiv 计算机论文入口采集轻量材料 | `src/collect_public_kb.py` | `data/public_kb/` 与 `manifest.json` |
 | 文档解析 | 读取 `data/` 下的 TXT、MD、PDF，抽取文本和来源信息 | `src/build_kb.py`：`read_text_file()`、`read_pdf()`、`load_documents()` | 标准化文档对象：`text`、`source`、`page` |
 | 文本分割 | 按长度、自然分隔符和重叠窗口切成 chunk | `src/build_kb.py`：`split_text()`、`build_chunks()` | 片段对象：`id`、`content`、`source`、`page`、`char_count` |
 | 向量嵌入 | 使用 Ollama 的 `nomic-embed-text` 生成 chunk 向量 | `src/build_kb.py`：`build_index()` | `chroma_db/knowledge_index.json` 中的 `embedding` |
@@ -617,7 +621,7 @@ result = answer_question(question.strip(), top_k=top_k)
 
 ## 六、可以在课程设计报告中这样表述
 
-本系统采用“离线建库 + 在线检索生成”的 RAG 架构。离线阶段，系统读取 `data/` 目录下的专业文档，支持 TXT、Markdown 和 PDF 格式；对 PDF 按页抽取文本，对普通文本按编码兼容方式读取。随后系统对文本进行清洗和分块，分块时设置 `CHUNK_SIZE=420`、`CHUNK_OVERLAP=80`，并优先在换行、句号、分号、逗号等自然边界处切分，以尽量保持片段语义完整。每个片段保存编号、正文、来源文件、页码和字符数。
+本系统采用“离线建库 + 在线检索生成”的 RAG 架构。离线阶段，系统可以先通过 `src/collect_public_kb.py` 采集公开 CSE 数据集和 arXiv 计算机论文摘要，也可以直接使用当前已经保存在 `data/public_kb/` 的本地材料。随后系统读取 `data/` 目录下的专业文档，支持 TXT、Markdown 和 PDF 格式；对 PDF 按页抽取文本，对普通文本按编码兼容方式读取。系统对文本进行清洗和分块，分块时设置 `CHUNK_SIZE=420`、`CHUNK_OVERLAP=80`，并优先在换行、句号、分号、逗号等自然边界处切分，以尽量保持片段语义完整。每个片段保存编号、正文、来源文件、页码和字符数。
 
 在向量化阶段，系统通过本地 Ollama 服务调用 `nomic-embed-text` 模型，将每个文本片段转换为高维向量，并将片段元数据和向量一起保存到 `chroma_db/knowledge_index.json`。在线问答时，用户问题同样被转换为向量，系统使用余弦相似度计算问题向量与知识库片段向量的语义相关度。同时，为了增强中文专业术语匹配效果，系统还使用字符级 TF-IDF 计算关键词相似度，并按照 `0.45 * 向量分 + 0.55 * 关键词分` 的方式得到综合分，最终返回 Top-K 个最相关片段。
 

@@ -24,7 +24,7 @@ RAG，即检索增强生成，是解决上述问题的一种常见技术路线�
 
 系统采用本地 Ollama 服务作为模型运行基础。根据 port.md 标注，Ollama API 地址使用 http://127.0.0.1:8090。生成模型默认配置为 qwen2.5:7b-instruct-q4_K_M，Embedding 模型默认配置为 nomic-embed-text。代码配置集中保存在 src/config.py 中，便于统一修改端口、模型和 RAG 参数。
 
-整体技术路线如下：首先读取 data 目录中的专业文档；然后按固定 chunk_size 和 chunk_overlap 将长文本切成语义片段；接着调用 Ollama Embedding 模型生成每个片段的向量；再把片段内容、元数据和向量保存到 chroma_db/knowledge_index.json；用户提问时系统生成问题向量，同时计算字符 n-gram TF-IDF 匹配分数，将向量相似度和关键词相似度加权融合，找出 Top-K 个最相关片段；最后把片段和问题填入 Prompt，由本地大模型生成答案。
+整体技术路线如下：首先准备 data 目录中的自建专业文档，并可通过 collect_public_kb.py 补充公开 CSE 数据集与 arXiv 计算机论文摘要；然后按固定 chunk_size 和 chunk_overlap 将长文本切成语义片段；接着调用 Ollama Embedding 模型生成每个片段的向量；再把片段内容、元数据和向量保存到 chroma_db/knowledge_index.json；用户提问时系统生成问题向量，同时计算字符 n-gram TF-IDF 匹配分数，将向量相似度和关键词相似度加权融合，找出 Top-K 个最相关片段；最后把片段和问题填入 Prompt，由本地大模型生成答案。
 
 第二章 环境配置与模型选择
 
@@ -65,6 +65,8 @@ python src/model_compare.py
 3.2 文档解析与文本切分
 
 文档解析阶段支持 TXT、Markdown 和 PDF。文本文件优先使用 UTF-8、UTF-8-SIG 和 GB18030 读取，以兼容常见中文资料。PDF 解析使用 pypdf，并保留页码信息。公开数据采集阶段默认把 CSE 课程材料片段和 arXiv 论文摘要转换为 Markdown，写入 data/public_kb 目录，并通过 manifest.json 保存 title、source、license、url 和 output_path，保证公开材料可追溯。由于不同类型文档最终都会转化为统一的文本和元数据结构，后续切分、向量化和检索流程不需要关心原始文件类型。
+
+当前本地已经完成公开材料采集，data/public_kb 下保存 37 份公开材料，manifest.json 中记录来源和输出路径；重新构建后的 knowledge_index.json 记录 document_count 为 41、chunk_count 为 163，说明自建资料和公开材料均已进入当前检索索引。
 
 文本切分阶段设置 CHUNK_SIZE 为 420，CHUNK_OVERLAP 为 80。相比把整份短资料切成很少的大块，这种设置能让“虚拟内存”“B+ 树索引”“TCP 可靠传输”等专业概念更容易被单独召回。重叠区间用于缓解分句边界导致的信息丢失。切分函数会优先在段落、换行、句号、分号、逗号和空格处截断，尽量保持片段语义完整。
 
