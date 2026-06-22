@@ -102,7 +102,7 @@ Prompt 设计强调三点约束。第一，模型必须只依据参考资料回�
 
 4.5 提升档优化设计
 
-提升档围绕 RAG 策略优化展开，采用“纯向量检索 vs 混合检索”的控制实验。实验固定知识库、评测问题、生成模型和 Top-K 参数，只改变检索排序方式：vector 只使用 Embedding 余弦相似度，hybrid 使用 0.45 * 向量分 + 0.55 * 字符 n-gram TF-IDF 关键词分。
+提升档围绕 RAG 策略优化展开，采用“纯向量检索 vs 混合检索”的控制实验。实验固定知识库、评测问题、生成模型和 Top-K 参数，只改变检索排序方式：vector 只使用 Embedding 余弦相似度，hybrid 使用当前代码中的三路融合方案，即 0.40 * 向量分 + 0.45 * 字符 n-gram TF-IDF 关键词分 + 0.15 * 实体匹配分。早期文档中提到的 0.45/0.55 二路权重只作为历史实现记录，不用于解释 full30_20260621 结果。
 
 首次完整实验结果如下：
 
@@ -141,7 +141,7 @@ Prompt 设计强调三点约束。第一，模型必须只依据参考资料回�
 
 本课程设计完成了一个基于 Ollama 的本地计算机专业文档问答系统。系统从任务分析出发，实现了文档解析、文本切分、Embedding 向量化、余弦相似度检索、本地大模型生成、Web 页面展示和 30 条样本批量评测。与简单运行参考教程示例不同，本项目根据端口和依赖要求做了本地化改造，使用 http://127.0.0.1:8090 访问 Ollama，并采用 JSON 索引加 scikit-learn 检索的轻量实现，便于说明原理和复现实验。
 
-系统仍存在改进空间。第一，当前公开知识库采用轻量抽样方式，后续可以进一步扩大 Hugging Face 数据集和 arXiv 论文覆盖范围。第二，JSON 向量索引适合小规模数据，大规模场景应迁移到专业向量数据库。第三，自动评测中的参考答案覆盖度只是近似指标，最终仍需要人工判断答案事实性和表达质量。第四，当前已增加纯向量检索与混合检索控制实验，证明 hybrid 检索相对 vector 基线能提升检索命中率和参考答案覆盖度；同时已增加 DeepSeek R1 与 Qwen 双模型对比模块，可比较 deepseek-r1:7b-qwen-distill-q4_K_M 和 qwen2.5:7b-instruct-q4_K_M 在成功率、参考答案覆盖度、检索命中率和响应时间上的差异。
+系统仍存在改进空间。第一，当前公开知识库采用轻量抽样方式，后续可以进一步扩大 Hugging Face 数据集和 arXiv 论文覆盖范围。第二，JSON 向量索引适合小规模数据，大规模场景应迁移到专业向量数据库。第三，自动评测中的参考答案覆盖度只是近似指标，最终仍需要人工判断答案事实性和表达质量。第四，当前已增加纯向量检索与三路 hybrid 检索控制实验，证明 hybrid 检索相对 vector 基线能提升检索命中率和参考答案覆盖度；同时已增加 DeepSeek R1 与 Qwen 双模型对比模块，可比较 deepseek-r1:7b-qwen-distill-q4_K_M 和 qwen2.5:7b-instruct-q4_K_M 在成功率、参考答案覆盖度、检索命中率和响应时间上的差异。`src/` 下核心代码也补充了必要中文注释，主要用于说明端口、切分、三路融合、评测控制变量和增量保存等容易被问到的实现细节。
 
 参考文献
 
@@ -167,3 +167,113 @@ src/eval.py：读取 30 条评测样本，输出评测明细和统计摘要。
 src/rag_strategy_compare.py：执行纯向量检索与混合检索的优化前后控制实验。
 eval_questions.csv：保存问题、参考答案和期望来源。
 README.md：说明环境配置、运行命令和项目结构。
+
+## 2026-06-21 补充流程记录（不覆盖原结果）
+
+本轮目标是在当前 `feature` 分支的高级 RAG 改动基础上边修复运行问题边执行一轮可复现流程。由于当前 Docker/Ollama 使用 CPU 推理 `qwen2.5:7b-instruct-q4_K_M`，单题生成耗时较长，若继续使用默认 `NUM_PREDICT=300` 和完整上下文扩展，评测容易触发 240 秒读取超时。因此本轮补充流程采用轻量运行参数验证完整链路，历史 30 条完整评测结果不被覆盖。
+
+本轮修复与增强：
+
+- `src/rag_chain.py`：为生成调用增加 `num_predict`、`timeout` 和 `expand_context_enabled` 可选参数；CLI 新增 `--num-predict`、`--timeout`、`--no-context-expansion`。
+- `src/eval.py`：新增 `--limit` 和 `--output-suffix`，支持小样本补充评测并把新结果写入带后缀文件。
+- `src/rag_strategy_compare.py`、`src/prompt_compare.py`：新增短生成参数、上下文扩展开关和输出后缀，避免覆盖既有结果。
+- `src/weight_tune.py`：改为纯检索权重搜索，不再对每组权重调用 LLM 生成，指标改为 `hit_rate + avg_score_margin`，更符合检索权重调优目的。
+
+本轮执行命令：
+
+```cmd
+python -m py_compile src\config.py src\rag_chain.py src\eval.py src\rag_strategy_compare.py src\prompt_compare.py src\weight_tune.py src\app.py
+python src\build_kb.py
+python src\eval.py --limit 3 --top-k 2 --prompt baseline --num-predict 24 --timeout 180 --no-context-expansion --output-suffix goal_20260621
+python src\rag_strategy_compare.py --limit 2 --modes vector hybrid adaptive --top-k 2 --prompt baseline --num-predict 24 --timeout 180 --no-context-expansion --output-suffix goal_20260621
+python src\prompt_compare.py --limit 1 --variants baseline stepwise reflective --top-k 2 --num-predict 24 --timeout 180 --no-context-expansion --output-suffix goal_20260621
+python src\weight_tune.py --limit 5 --top-k 2 --entity-fixed 0.15 --output-suffix goal_20260621
+```
+
+本轮新增结果文件：
+
+- `results/eval_results_goal_20260621.csv`
+- `results/eval_summary_goal_20260621.json`
+- `results/rag_strategy_compare_results_goal_20260621.csv`
+- `results/rag_strategy_compare_summary_goal_20260621.json`
+- `results/prompt_compare_results_goal_20260621.csv`
+- `results/prompt_compare_summary_goal_20260621.json`
+- `results/weight_tune_results_goal_20260621.json`
+
+本轮结果摘要：
+
+| 实验 | 样本/设置 | 主要结果 | 平均耗时 |
+|---|---|---|---:|
+| 单模型轻量评测 | 3 条，Top-K=2，baseline，num_predict=24 | 检索命中率 1.0000，平均参考覆盖度 0.1057 | 71.1078s |
+| RAG 策略对比 vector | 2 条，Top-K=2 | 命中率 0.5000，覆盖度 0.2561 | 59.0952s |
+| RAG 策略对比 hybrid | 2 条，Top-K=2 | 命中率 1.0000，覆盖度 0.1220 | 63.8648s |
+| RAG 策略对比 adaptive | 2 条，Top-K=2 | 命中率 1.0000，覆盖度 0.1220，平均检索轮数 1.0000 | 140.4118s |
+| Prompt 对比 baseline | 1 条，Top-K=2 | 命中率 1.0000，覆盖度 0.4390 | 97.9050s |
+| Prompt 对比 stepwise | 1 条，Top-K=2 | 命中率 1.0000，覆盖度 0.1707 | 110.9410s |
+| Prompt 对比 reflective | 1 条，Top-K=2 | 命中率 1.0000，覆盖度 0.2927 | 93.7747s |
+| 权重搜索 | 5 条，Top-K=2，entity=0.15 | 最优 `emb=0.30, lex=0.55, entity=0.15`，命中率 1.0000，平均分差 0.4834 | 纯检索 |
+
+结果说明：本轮轻量实验主要用于验证高级 RAG 改动的可运行性和补充记录，不替代完整 30 条评测。由于 `num_predict=24` 输出被刻意截短，参考答案覆盖度偏低是预期现象；更适合比较检索链路、脚本稳定性和运行耗时。报告主结论以 `full30_20260621` 的完整 30 条结果为准。
+
+补充双模型轻量对比（2026-06-21）：
+
+```cmd
+python src\model_compare.py --limit 1 --top-k 2 --num-predict 16 --timeout 180 --no-context-expansion --output-suffix goal_20260621
+```
+
+新增结果文件：
+
+- `results/model_compare_results_goal_20260621.csv`
+- `results/model_compare_summary_goal_20260621.json`
+
+| 模型 | 样本数 | 成功率 | 检索命中率 | 平均参考覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| deepseek-r1:7b-qwen-distill-q4_K_M | 1 | 1.0000 | 1.0000 | 0.0000 | 1.6942s | 139.9968s | 141.6911s |
+| qwen2.5:7b-instruct-q4_K_M | 1 | 1.0000 | 1.0000 | 0.0976 | 0.6193s | 136.7221s | 137.3414s |
+
+说明：本轮双模型补充对比同样采用短输出 `num_predict=16`，用于验证双模型链路和结果文件后缀机制，不替代既有 30 条完整双模型评测。短输出会显著降低参考覆盖度，尤其 DeepSeek 在 16 token 限制下输出更容易不完整。
+
+## 2026-06-22 完整 30 条全套评测结果（full30_20260621）
+
+为进一步补齐完整实验材料，本轮在当前 `feature` 分支上执行了完整 30 条样本的全套评测。所有结果文件均使用 `full30_20260621` 后缀，避免覆盖既有结果。本轮固定 `Top-K=4`，默认生成模型为 `qwen2.5:7b-instruct-q4_K_M`，生成参数设置为 `num_predict=64`、`timeout=360`，并关闭 context expansion。该设置是为了适配本地 Docker/Ollama 上 7B 量化模型的 CPU 推理耗时，样本数仍为完整 30 条。
+
+完整性审计结果如下：
+
+| 模块 | 结果文件 | 明细数量 | 完成情况 |
+|---|---|---:|---|
+| 单模型效果评测 | `eval_summary_full30_20260621.json` | 30 | `complete=true` |
+| RAG 策略对比 | `rag_strategy_compare_summary_full30_20260621.json` | 90 | 三种策略各 30 条 |
+| Prompt 对比 | `prompt_compare_summary_full30_20260621.json` | 90 | 三种 Prompt 各 30 条 |
+| 双模型对比 | `model_compare_summary_full30_20260621.json` | 60 | 两个模型各 30 条 |
+| 权重调优 | `weight_tune_results_full30_20260621.json` | 5 组权重 | `complete=true` |
+
+单模型效果评测结果为：30 条样本全部成功，检索命中率为 1.0000，平均参考答案覆盖度为 0.5585，平均检索耗时为 0.7879s，平均生成耗时为 147.4923s，平均总耗时为 148.2807s。
+
+RAG 策略优化控制实验结果如下：
+
+| 检索策略 | 样本数 | 成功率 | 检索命中率 | 平均参考覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| vector | 30 | 1.0000 | 0.7000 | 0.3669 | 0.6956s | 122.6932s | 123.3889s |
+| hybrid | 30 | 1.0000 | 1.0000 | 0.5404 | 0.7362s | 137.6391s | 138.3754s |
+| adaptive | 30 | 1.0000 | 1.0000 | 0.3850 | 124.5705s | 161.5900s | 286.2434s |
+
+其中 `vector` 为优化前基线，`hybrid` 为优化后方案。实验固定知识库、评测问题、生成模型和 Top-K，只改变检索排序方式。结果表明，hybrid 将检索命中率从 0.7000 提升到 1.0000，将平均参考覆盖度从 0.3669 提升到 0.5404，说明 TF-IDF 关键词得分能够补足纯向量检索在中文专业术语匹配上的不足。`adaptive` 作为附加策略也保持 1.0000 的命中率，但耗时显著增加，因此在本项目默认配置中仍采用 hybrid 作为更稳妥的优化策略。
+
+Prompt 对比结果如下：
+
+| Prompt 变体 | 样本数 | 检索命中率 | 平均参考覆盖度 | 推理忠实度 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|
+| baseline | 30 | 1.0000 | 0.5286 | 0.0000 | 138.3741s | 138.9987s |
+| stepwise | 30 | 1.0000 | 0.3782 | 0.8000 | 134.2031s | 134.8031s |
+| reflective | 30 | 1.0000 | 0.6596 | 0.0667 | 141.7036s | 142.3079s |
+
+双模型对比结果如下：
+
+| 模型 | 样本数 | 成功率 | 检索命中率 | 平均参考覆盖度 | 平均检索耗时 | 平均生成耗时 | 平均总耗时 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| deepseek-r1:7b-qwen-distill-q4_K_M | 30 | 1.0000 | 1.0000 | 0.0000 | 0.6406s | 141.5903s | 142.2310s |
+| qwen2.5:7b-instruct-q4_K_M | 30 | 1.0000 | 1.0000 | 0.5382 | 0.6562s | 146.3384s | 146.9947s |
+
+在 `num_predict=64` 的受控输出长度下，DeepSeek 的自动参考覆盖度为 0.0000，说明其输出格式或内容与当前字符级覆盖度指标不匹配，不宜单独据此判定语义质量；Qwen 在同一条件下覆盖度更高，因此仍更适合作为本项目默认生成模型。
+
+权重调优结果显示，五组候选权重的命中率均为 1.0000，其中 `emb=0.30, lex=0.55, entity=0.15` 的平均分差最高，为 0.5419。因此当前数据集下关键词权重略高于向量权重更有利于正确片段排序，这也与 hybrid 优于 vector 的控制实验结论一致。

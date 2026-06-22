@@ -1,0 +1,50 @@
+{
+  "question_count": 30,
+  "top_k": 4,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "variants": [
+    "baseline",
+    "stepwise",
+    "reflective"
+  ],
+  "num_predict": 64,
+  "timeout": 360,
+  "context_expansion": false,
+  "variant_summaries": [
+    {
+      "prompt_variant": "baseline",
+      "sample_count": 30,
+      "success_count": 30,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.5286,
+      "average_reasoning_faithfulness": 0.0,
+      "average_generate_time": 138.3741,
+      "average_total_time": 138.9987
+    },
+    {
+      "prompt_variant": "stepwise",
+      "sample_count": 30,
+      "success_count": 30,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.3782,
+      "average_reasoning_faithfulness": 0.8,
+      "average_generate_time": 134.2031,
+      "average_total_time": 134.8031
+    },
+    {
+      "prompt_variant": "reflective",
+      "sample_count": 30,
+      "success_count": 30,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.6596,
+      "average_reasoning_faithfulness": 0.0667,
+      "average_generate_time": 141.7036,
+      "average_total_time": 142.3079
+    }
+  ],
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\prompt_compare_results_full30_20260621.csv",
+  "complete": true
+}

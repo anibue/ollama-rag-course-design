@@ -21,6 +21,7 @@ SUPPORTED_SUFFIXES = {".txt", ".md", ".markdown", ".pdf"}
 
 
 def read_text_file(path: Path) -> str:
+    # 自建材料和公开材料来源不完全一样，编码这里多试几种。
     for encoding in ("utf-8", "utf-8-sig", "gb18030"):
         try:
             return path.read_text(encoding=encoding)
@@ -66,6 +67,7 @@ def split_text(text: str, chunk_size: int, chunk_overlap: int) -> List[str]:
     if len(normalized) <= chunk_size:
         return [normalized]
 
+    # 尽量贴着标点切，比硬按长度截断更不容易拆开一个概念。
     separators = ["\n\n", "\n", "。", "；", "，", ". ", "; ", ", ", " "]
     chunks: List[str] = []
     start = 0
@@ -90,6 +92,7 @@ def split_text(text: str, chunk_size: int, chunk_overlap: int) -> List[str]:
 
         if end >= len(normalized):
             break
+        # 留一点重叠，检索到边界片段时上下文不会断得太突兀。
         start = max(end - chunk_overlap, start + 1)
 
     return chunks
@@ -122,9 +125,11 @@ def build_index() -> Dict[str, object]:
         raise RuntimeError(f"{DATA_DIR} 中没有可读取的 TXT/MD/PDF 文档。")
 
     chunks = build_chunks(documents)
+    # Embedding 直接调本地 Ollama，端口和模型名不对时通常会卡在这里。
     embedder = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=OLLAMA_BASE_URL)
     embeddings = embedder.embed_documents([chunk["content"] for chunk in chunks])
 
+    # 目录名保留 chroma_db，但这里实际写 JSON，方便检查每个片段和向量来源。
     index = {
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "embedding_model": EMBEDDING_MODEL,

@@ -91,6 +91,7 @@ def add_manifest_record(
     source_type: str,
     extra: Optional[Dict[str, object]] = None,
 ) -> None:
+    # manifest 只管记录来源和许可，真正参与建库的是生成出来的 md/pdf 文件。
     record = {
         "title": title,
         "source": source,
@@ -176,6 +177,7 @@ def split_markdown_records(title: str, raw_text: str, max_items: int) -> List[Di
 
 def fetch_cse_records(max_items: int, timeout: int) -> List[Dict[str, str]]:
     card_url = f"{HF_DATASET_URL}/{CSE_REPO}/raw/main/README.md"
+    # 先读取数据集卡片。它小、稳定，网络环境一般时也比较容易成功。
     card_text = request_text(card_url, timeout=timeout)
     card_records = split_markdown_records("CSE Course RAG dataset card", card_text, max_items)
     for record in card_records:
@@ -196,6 +198,7 @@ def fetch_cse_records(max_items: int, timeout: int) -> List[Dict[str, str]]:
         suffix = Path(path).suffix.lower()
         if item.get("type") != "file" or suffix not in {".json", ".jsonl", ".md", ".txt", ".csv"}:
             continue
+        # 不拉大文件，主要是为了让仓库保持轻量，答辩现场也能复现。
         if size and size > 2_000_000:
             continue
         if any(part in path.lower() for part in ("/indices/", "/converted/", "/scratch/")):
@@ -348,6 +351,7 @@ def get_arxiv_api_rows(limit: int, timeout: int, categories: List[str]) -> List[
 def fetch_arxiv_records(limit: int, timeout: int, categories: List[str]) -> List[Dict[str, object]]:
     rows: List[Dict[str, object]] = []
     try:
+        # Hugging Face 元数据优先；失败时再走 arXiv API 和少量种子记录兜底。
         rows = get_hf_arxiv_rows(limit=limit, timeout=timeout, categories=categories)
     except requests.RequestException:
         pass
@@ -453,6 +457,7 @@ def write_arxiv_documents(
 
 def write_manifest(output_dir: Path, manifest: List[Dict[str, object]], args: argparse.Namespace) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
+    # documents 放在 dict 里面，报告里不要误写成顶层 list。
     payload = {
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "output_dir": str(output_dir.relative_to(BASE_DIR)),
@@ -488,6 +493,7 @@ def write_manifest(output_dir: Path, manifest: List[Dict[str, object]], args: ar
 
 
 def clear_generated_markdown(output_dir: Path) -> None:
+    # 只清理脚本生成的 Markdown，不动手写课程文档和已下载 PDF。
     for subdir in ("cse_course_rag", "arxiv"):
         target_dir = output_dir / subdir
         if not target_dir.exists():

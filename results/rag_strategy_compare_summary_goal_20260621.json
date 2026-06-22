@@ -1,0 +1,58 @@
+{
+  "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
+  "question_count": 2,
+  "top_k": 2,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "prompt_variant": "baseline",
+  "num_predict": 24,
+  "timeout": 180,
+  "context_expansion": false,
+  "modes": [
+    "vector",
+    "hybrid",
+    "adaptive"
+  ],
+  "default_retrieval_mode": "hybrid",
+  "mode_summaries": [
+    {
+      "retrieval_mode": "vector",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 2,
+      "success_count": 2,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 0.5,
+      "average_reference_overlap": 0.2561,
+      "average_retrieval_rounds": 1.0,
+      "average_retrieve_time": 0.4017,
+      "average_generate_time": 58.6934,
+      "average_total_time": 59.0952
+    },
+    {
+      "retrieval_mode": "hybrid",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 2,
+      "success_count": 2,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.122,
+      "average_retrieval_rounds": 1.0,
+      "average_retrieve_time": 0.4873,
+      "average_generate_time": 63.3774,
+      "average_total_time": 63.8648
+    },
+    {
+      "retrieval_mode": "adaptive",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 2,
+      "success_count": 2,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.122,
+      "average_retrieval_rounds": 1.0,
+      "average_retrieve_time": 60.329,
+      "average_generate_time": 80.0092,
+      "average_total_time": 140.4118
+    }
+  ],
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\rag_strategy_compare_results_goal_20260621.csv"
+}

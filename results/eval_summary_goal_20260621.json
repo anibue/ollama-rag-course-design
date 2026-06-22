@@ -1,0 +1,17 @@
+{
+  "question_count": 3,
+  "sample_count": 3,
+  "top_k": 2,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "prompt_variant": "baseline",
+  "num_predict": 24,
+  "timeout": 180,
+  "context_expansion": false,
+  "retrieval_hit_rate": 1.0,
+  "average_reference_overlap": 0.1057,
+  "average_reasoning_faithfulness": 0.0,
+  "average_retrieve_time": 0.5063,
+  "average_generate_time": 70.6015,
+  "average_total_time": 71.1078,
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\eval_results_goal_20260621.csv"
+}

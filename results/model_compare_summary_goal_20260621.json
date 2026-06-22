@@ -1,0 +1,37 @@
+{
+  "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
+  "question_count": 1,
+  "top_k": 2,
+  "models": [
+    "deepseek-r1:7b-qwen-distill-q4_K_M",
+    "qwen2.5:7b-instruct-q4_K_M"
+  ],
+  "num_predict": 16,
+  "timeout": 180,
+  "context_expansion": false,
+  "model_summaries": [
+    {
+      "model": "deepseek-r1:7b-qwen-distill-q4_K_M",
+      "sample_count": 1,
+      "success_count": 1,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.0,
+      "average_retrieve_time": 1.6942,
+      "average_generate_time": 139.9968,
+      "average_total_time": 141.6911
+    },
+    {
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "sample_count": 1,
+      "success_count": 1,
+      "success_rate": 1.0,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.0976,
+      "average_retrieve_time": 0.6193,
+      "average_generate_time": 136.7221,
+      "average_total_time": 137.3414
+    }
+  ],
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\model_compare_results_goal_20260621.csv"
+}

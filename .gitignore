@@ -5,3 +5,11 @@ __pycache__/
 .streamlit/
 .playwright-mcp/
 data/public_kb/papers/*.pdf
+.vscode/
+.gitignore
+.antigravitycli/
+.reasonix/
+.codegraph/
+.codeboarding/
+.idea/
+reasonix.toml

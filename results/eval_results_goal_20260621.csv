@@ -1,0 +1,4 @@
+﻿id,category,question,reference_answer,answer,expected_source,top_sources,retrieval_hit,reference_overlap,reasoning_faithfulness,retrieve_time,generate_time,total_time
+1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,计算机网络采用分层体系结构的主要意义在于通过将系统分解为多个层次来降低复杂度，并且每一,computer_networks.md,computer_networks.md(0.8500); computer_networks.md(0.3656),1,0.3171,0.0,0.5852,84.7538,85.3391
+2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,OSI参考模型包含了物理层、数据链路层、网络层、传输层、会话层、表示,computer_networks.md,computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654),1,0.0,0.0,0.5123,57.2681,57.7805
+3,网络,TCP 为什么适合文件传输和网页访问？,TCP 面向连接并提供可靠传输，使用确认、重传、流量控制和拥塞控制保证数据可靠到达。,TCP（传输控制协议）适合文件传输和网页访问因为其能够提供可靠的数据传输服务。具体来说：,computer_networks.md,computer_networks.md(0.9002); computer_networks.md(0.4499),1,0.0,0.0,0.4213,69.7825,70.2039

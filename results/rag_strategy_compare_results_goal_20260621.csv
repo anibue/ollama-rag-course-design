@@ -1,0 +1,11 @@
+﻿retrieval_mode,model,top_k,prompt_variant,num_predict,timeout,context_expansion,id,category,question,reference_answer,expected_source,success,answer,top_sources,retrieval_hit,reference_overlap,retrieval_rounds,retrieve_time,generate_time,total_time,error
+vector,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,1,计算机网络采用分层体系结构的主要意义在于降低系统复杂度，并通过接口向上层提供服务。这样既,computer_networks.md(0.7074); database_systems.md(0.6575),1,0.5122,1,0.3747,87.7358,88.1105,
+vector,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,1,"知识库中没有找到明确答案。
+
+[片段1] 与用户问题无关，未提及OSI参考模型",arxiv_020_2605.22765v1.md(0.7186),0,0.0,1,0.4287,29.651,30.0798,
+hybrid,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,1,计算机网络采用分层体系结构的主要意义在于通过将复杂系统分解为多个层次来降低系统的整体复杂度,computer_networks.md(0.8500); computer_networks.md(0.3656),1,0.2439,1,0.4612,71.2438,71.7051,
+hybrid,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,1,OSI参考模型包含了物理层、数据链路层、网络层、传输层、会话层、表示,computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654),1,0.0,1,0.5134,55.5111,56.0245,
+adaptive,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,1,"## 步骤 1：信息评估
+参考资料中的片段1提供了关于分层体系结构的相关信息，可以直接",computer_networks.md(0.8500); computer_networks.md(0.3656),1,0.2439,1,70.1461,87.5076,157.7263,
+adaptive,qwen2.5:7b-instruct-q4_K_M,2,baseline,24,180,False,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,1,"## 步骤 1：信息评估
+根据参考资料中的片段1，可以找到关于OSI参考模型的信息",computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654),1,0.0,1,50.5118,72.5108,123.0972,

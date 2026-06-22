@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560">
+  <defs>
+    <style>
+      .stage-title { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; font-size: 23px; font-weight: 700; fill: #172033; }
+      .stage-sub { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; font-size: 17px; fill: #42526b; }
+      .lane { fill: #f7f9fc; stroke: #c9d4e5; stroke-width: 2; }
+      .box { rx: 14; ry: 14; stroke-width: 2.5; }
+      .b1 { fill: #edf7f2; stroke: #54a77b; }
+      .b2 { fill: #eef4ff; stroke: #5a86d6; }
+      .b3 { fill: #fff6e9; stroke: #d39138; }
+      .b4 { fill: #f4efff; stroke: #8a6bd6; }
+      .b5 { fill: #eef8fa; stroke: #4d9daf; }
+      .b6 { fill: #fff1f1; stroke: #d96b6b; }
+      .b7 { fill: #f5f6f8; stroke: #8993a4; }
+      .arrow { stroke: #52627a; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .caption { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; font-size: 18px; fill: #334155; }
+    </style>
+    <marker id="arrowhead" markerWidth="13" markerHeight="10" refX="11" refY="5" orient="auto">
+      <path d="M 0 0 L 12 5 L 0 10 z" fill="#52627a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="560" fill="#ffffff"/>
+
+  <rect x="55" y="35" width="1490" height="230" rx="20" class="lane"/>
+  <rect x="55" y="315" width="1490" height="210" rx="20" class="lane"/>
+  <text x="82" y="67" class="caption">知识库构建链路</text>
+  <text x="82" y="347" class="caption">问答与评测链路</text>
+
+  <g transform="translate(90,95)">
+    <rect width="210" height="120" class="box b1"/>
+    <text x="105" y="42" text-anchor="middle" class="stage-title">原始文档</text>
+    <text x="105" y="75" text-anchor="middle" class="stage-sub">自建课程文档</text>
+    <text x="105" y="101" text-anchor="middle" class="stage-sub">公开数据 / 论文摘要</text>
+  </g>
+
+  <g transform="translate(355,95)">
+    <rect width="210" height="120" class="box b2"/>
+    <text x="105" y="42" text-anchor="middle" class="stage-title">解析与切分</text>
+    <text x="105" y="75" text-anchor="middle" class="stage-sub">Markdown / TXT / PDF</text>
+    <text x="105" y="101" text-anchor="middle" class="stage-sub">420 字 + 80 重叠</text>
+  </g>
+
+  <g transform="translate(620,95)">
+    <rect width="210" height="120" class="box b3"/>
+    <text x="105" y="42" text-anchor="middle" class="stage-title">向量化</text>
+    <text x="105" y="75" text-anchor="middle" class="stage-sub">nomic-embed-text</text>
+    <text x="105" y="101" text-anchor="middle" class="stage-sub">Ollama Embedding API</text>
+  </g>
+
+  <g transform="translate(885,95)">
+    <rect width="240" height="120" class="box b4"/>
+    <text x="120" y="42" text-anchor="middle" class="stage-title">JSON 知识库索引</text>
+    <text x="120" y="75" text-anchor="middle" class="stage-sub">knowledge_index.json</text>
+    <text x="120" y="101" text-anchor="middle" class="stage-sub">41 文档 / 163 片段</text>
+  </g>
+
+  <g transform="translate(1180,95)">
+    <rect width="250" height="120" class="box b5"/>
+    <text x="125" y="42" text-anchor="middle" class="stage-title">可解释检索特征</text>
+    <text x="125" y="75" text-anchor="middle" class="stage-sub">向量相似度 + TF-IDF</text>
+    <text x="125" y="101" text-anchor="middle" class="stage-sub">实体匹配分</text>
+  </g>
+
+  <path d="M 305 155 L 345 155" class="arrow"/>
+  <path d="M 570 155 L 610 155" class="arrow"/>
+  <path d="M 835 155 L 875 155" class="arrow"/>
+  <path d="M 1130 155 L 1170 155" class="arrow"/>
+
+  <path d="M 1305 215 C 1305 285 260 280 260 365" class="arrow"/>
+
+  <g transform="translate(90,385)">
+    <rect width="250" height="110" class="box b5"/>
+    <text x="125" y="39" text-anchor="middle" class="stage-title">检索策略</text>
+    <text x="125" y="70" text-anchor="middle" class="stage-sub">vector / hybrid / adaptive</text>
+    <text x="125" y="94" text-anchor="middle" class="stage-sub">默认 Top-K = 4</text>
+  </g>
+
+  <g transform="translate(410,385)">
+    <rect width="220" height="110" class="box b3"/>
+    <text x="110" y="39" text-anchor="middle" class="stage-title">Prompt 构造</text>
+    <text x="110" y="70" text-anchor="middle" class="stage-sub">问题 + Top-K 片段</text>
+    <text x="110" y="94" text-anchor="middle" class="stage-sub">baseline / stepwise</text>
+  </g>
+
+  <g transform="translate(700,385)">
+    <rect width="260" height="110" class="box b6"/>
+    <text x="130" y="39" text-anchor="middle" class="stage-title">Ollama 本地生成</text>
+    <text x="130" y="70" text-anchor="middle" class="stage-sub">qwen2.5 / DeepSeek R1</text>
+    <text x="130" y="94" text-anchor="middle" class="stage-sub">http://127.0.0.1:8090</text>
+  </g>
+
+  <g transform="translate(1030,385)">
+    <rect width="210" height="110" class="box b1"/>
+    <text x="105" y="39" text-anchor="middle" class="stage-title">Web 展示</text>
+    <text x="105" y="70" text-anchor="middle" class="stage-sub">Streamlit 页面</text>
+    <text x="105" y="94" text-anchor="middle" class="stage-sub">答案与参考片段</text>
+  </g>
+
+  <g transform="translate(1300,385)">
+    <rect width="210" height="110" class="box b7"/>
+    <text x="105" y="39" text-anchor="middle" class="stage-title">批量评测</text>
+    <text x="105" y="70" text-anchor="middle" class="stage-sub">full30 / 对照实验</text>
+    <text x="105" y="94" text-anchor="middle" class="stage-sub">CSV + JSON 结果</text>
+  </g>
+
+  <path d="M 345 440 L 400 440" class="arrow"/>
+  <path d="M 635 440 L 690 440" class="arrow"/>
+  <path d="M 965 440 L 1020 440" class="arrow"/>
+  <path d="M 1245 440 L 1290 440" class="arrow"/>
+</svg>

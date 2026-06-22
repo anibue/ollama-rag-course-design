@@ -109,6 +109,22 @@ chroma_db/knowledge_index.json
 python src/build_kb.py
 ```
 
+## 当前 RAG 参数口径
+
+当前报告和 full30 结果采用以下口径：
+
+| 参数 | 当前值 |
+|---|---|
+| 默认 Top-K | `4` |
+| 默认检索模式 | `hybrid` |
+| hybrid 权重 | `0.40 * 向量分 + 0.45 * TF-IDF 关键词分 + 0.15 * 实体匹配分` |
+| Prompt 策略 | `baseline`、`stepwise`、`reflective` |
+| full30 生成长度 | `num_predict=64` |
+| full30 超时 | `timeout=360` |
+| full30 context expansion | 关闭 |
+
+旧版二路权重 `0.45 * 向量分 + 0.55 * TF-IDF 分` 只作为历史实现记录；当前 full30 结果按三路融合解释。
+
 ## 公开知识库材料
 
 公开材料已保存在：
@@ -129,3 +145,13 @@ data/public_kb/manifest.json
 python src/collect_public_kb.py
 python src/build_kb.py
 ```
+
+## 源码注释状态
+
+`src/` 下核心脚本已补充必要中文注释，主要覆盖：
+
+- `src/config.py`：端口、代理、模型和检索参数。
+- `src/build_kb.py`、`src/collect_public_kb.py`：公开材料采集、文本读取、切分和 JSON 索引。
+- `src/rag_chain.py`：三路融合检索、语义去重、上下文扩展、adaptive 检索和 Ollama 生成。
+- `src/eval.py`、`src/rag_strategy_compare.py`、`src/prompt_compare.py`、`src/model_compare.py`、`src/weight_tune.py`、`src/full30_runner.py`：评测指标、控制变量和增量写盘。
+- `src/app.py`：Web 页面参数、对话状态和来源片段展示。

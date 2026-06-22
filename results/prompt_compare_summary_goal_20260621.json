@@ -1,0 +1,47 @@
+{
+  "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
+  "question_count": 1,
+  "top_k": 2,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "variants": [
+    "baseline",
+    "stepwise",
+    "reflective"
+  ],
+  "num_predict": 24,
+  "timeout": 180,
+  "context_expansion": false,
+  "variant_summaries": [
+    {
+      "prompt_variant": "baseline",
+      "sample_count": 1,
+      "success_count": 1,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.439,
+      "average_reasoning_faithfulness": 0.0,
+      "average_generate_time": 97.4992,
+      "average_total_time": 97.905
+    },
+    {
+      "prompt_variant": "stepwise",
+      "sample_count": 1,
+      "success_count": 1,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.1707,
+      "average_reasoning_faithfulness": 0.0,
+      "average_generate_time": 110.3718,
+      "average_total_time": 110.941
+    },
+    {
+      "prompt_variant": "reflective",
+      "sample_count": 1,
+      "success_count": 1,
+      "retrieval_hit_rate": 1.0,
+      "average_reference_overlap": 0.2927,
+      "average_reasoning_faithfulness": 0.0,
+      "average_generate_time": 93.2359,
+      "average_total_time": 93.7747
+    }
+  ],
+  "result_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\results\\prompt_compare_results_goal_20260621.csv"
+}

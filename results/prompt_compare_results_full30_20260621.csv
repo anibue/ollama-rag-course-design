@@ -1,0 +1,408 @@
+﻿prompt_variant,id,category,question,reference_answer,expected_source,model,top_k,num_predict,timeout,context_expansion,success,answer,top_sources,retrieval_hit,reference_overlap,reasoning_faithfulness,retrieval_rounds,retrieve_time,generate_time,total_time,error
+baseline,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"计算机网络采用分层体系结构的主要意义在于通过将复杂系统分解为多个层次来降低系统的整体复杂度。这样每一层只关注本层职责，并通过接口向上层提供服务。
+
+1. **关键概念**：每一层都专注于特定的功能，如物理层负责传输比特流，数据",computer_networks.md(0.8500); computer_networks.md(0.3656); ai_rag_notes.md(0.3626); database_systems.md(0.3553),1,0.7073,0.0,1,1.3183,206.2398,207.5581,
+baseline,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"OSI参考模型包括物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。
+
+- 物理层：负责定义了通过网络传输的原始比特流的机械与电气规范，是所有OSI模型中最基础的一层。
+- 数据链",computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654); arxiv_012_2605.22781v1.md(0.4421); ai_rag_notes.md(0.4369),1,0.0,0.0,1,0.5361,113.8541,114.3903,
+baseline,3,网络,TCP 为什么适合文件传输和网页访问？,TCP 面向连接并提供可靠传输，使用确认、重传、流量控制和拥塞控制保证数据可靠到达。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"TCP（传输控制协议）适合文件传输和网页访问的原因在于其能够提供可靠的数据传输服务。具体来说，TCP 通过三次握手建立连接，并在数据传输过程中使用序号、确认应答、重传机制以及流量控制和拥塞控制来确保数据的可靠性。
+
+1. **",computer_networks.md(0.9002); computer_networks.md(0.4499); ai_rag_notes.md(0.4000); database_systems.md(0.3712),1,0.0,0.0,1,0.5706,167.6331,168.2038,
+baseline,4,网络,UDP 的特点和典型应用场景是什么？,UDP 无连接、开销小、时延低，不保证可靠交付，常用于 DNS、实时音视频和在线游戏。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"UDP 是无连接传输协议，它不保证可靠交付，也不维护连接状态，因此协议开销小、时延低。其典型应用场景包括 DNS 查询、实时音视频、在线游戏等更关注实时性的场景。
+
+- 关键概念：UDP 作为无连接的传输协议，与 TCP",computer_networks.md(0.9102); computer_networks.md(0.7823); computer_networks.md(0.4248); ai_rag_notes.md(0.4163),1,0.3333,0.0,1,0.572,125.4798,126.0519,
+baseline,5,网络,CIDR 中 192.168.1.0/24 表示什么？,它表示前 24 位是网络前缀，对应 192.168.1.0 这个网络范围。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"CIDR 中 192.168.1.0/24 表示前 24 位是网络前缀。
+
+- 关键概念：CIDR（无类别域间路由）使用“地址/前缀长度”的方式表示网络范围，其中的前缀长度",computer_networks.md(1.0000); arxiv_013_2605.22779v1.md(0.3728); arxiv_011_2605.22785v1.md(0.3041); arxiv_014_2605.22776v1.md(0.3022),1,0.2,0.0,1,0.8781,121.4544,122.3326,
+baseline,6,网络,HTTPS 相比 HTTP 增加了哪些安全能力？,HTTPS 在 HTTP 与 TCP 之间加入 TLS，提供身份认证、数据加密和完整性校验。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"HTTPS相比HTTP增加了身份认证、数据加密和完整性校验的能力。
+
+- **身份认证**：通过TLS握手过程，服务器可以向客户端证明其身份，确保用户访问的是正确的网站而非伪造的站点。
+- **数据加密**：使用对称或非对称加密算法保护传输中的数据",computer_networks.md(0.8749); arxiv_002_2605.22820v1.md(0.5843); ai_rag_notes.md(0.5679); arxiv_009_2605.22791v1.md(0.5673),1,0.0,0.0,1,0.5134,130.0084,130.5219,
+baseline,7,网络,DNS 缓存有什么作用？,DNS 缓存可以减少重复查询并提高访问速度，但缓存过期时间会影响域名变更生效速度。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"DNS缓存可以减少重复查询，提高访问速度。但是，DNS缓存的过期时间可能会影响域名变更生效的速度。
+
+- 关键概念：DNS缓存存储了最近解析过的域名及其对应的IP地址记录。
+- 步骤或原因：
+  - 客户端首先会检查",computer_networks.md(0.9476); computer_networks.md(0.6611); computer_networks.md(0.4894); arxiv_002_2605.22820v1.md(0.4257),1,0.0,0.0,1,0.5811,140.0708,140.6521,
+baseline,8,操作系统,进程和线程的核心区别是什么？,进程是资源分配和保护的基本单位，线程是 CPU 调度的基本单位；同一进程内线程共享地址空间和资源。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,进程与线程的主要区别在于它们的资源拥有情况以及调度机制。进程是操作系统进行资源分配和保护的基本单位，每个进程拥有独立的地址空间、打开文件、寄存器上下文等资源；而线程则是CPU调度的基本单位，在同一进程内的多个线程共享进程地址,operating_systems.md(0.8125); operating_systems.md(0.4023); computer_networks.md(0.4000); ai_rag_notes.md(0.3770),1,0.0,0.0,1,0.661,145.128,145.7891,
+baseline,9,操作系统,线程共享数据为什么还需要锁或信号量？,线程共享进程地址空间，多个线程并发访问共享数据可能产生竞态条件，因此需要同步机制。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"线程共享数据时需要使用锁或信号量来处理并发访问带来的竞态条件。这是因为多个线程可能同时读写同一块内存区域，如果缺乏适当的同步机制，可能会导致数据不一致或其他错误。
+
+1. **关键概念**：在多线程环境中，每个线程都有",operating_systems.md(0.8318); database_systems.md(0.4722); computer_networks.md(0.4423); ai_rag_notes.md(0.4239),1,0.7714,0.0,1,0.5709,167.1838,167.7547,
+baseline,10,操作系统,时间片轮转调度为什么适合交互式系统？,时间片轮转为每个就绪进程分配固定时间片，提升公平性和响应性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"时间片轮转调度算法适合交互式系统，因为它能够为每个就绪进程分配固定的时间片，从而确保每个进程都能定期获得CPU的执行机会。这样可以提高系统的响应性和公平性。
+
+- 关键概念：时间片轮转是一种调度策略，它将CPU时间划分为固定",operating_systems.md(0.7571); database_systems.md(0.4287); ai_rag_notes.md(0.3621); computer_networks.md(0.3510),1,0.9615,0.0,1,0.575,171.4774,172.0525,
+baseline,11,操作系统,虚拟内存的作用是什么？,虚拟内存将进程地址空间与物理内存解耦，扩大可用地址空间、提供隔离并支持按需分页。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"虚拟内存的主要作用是扩大可用地址空间、提供进程隔离、简化程序装载以及支持按需分页。
+
+- 关键概念：虚拟内存通过将进程看到的地址空间与物理内存解耦来实现上述功能。操作系统使用页表将虚拟页映射到物理页框，并可以将",operating_systems.md(0.8500); operating_systems.md(0.6028); computer_networks.md(0.5271); computer_networks.md(0.4159),1,1.0,0.0,1,0.5731,149.1176,149.6908,
+baseline,12,操作系统,缺页中断频繁会导致什么问题？,频繁缺页会使系统不断换入换出页面，导致抖动和性能下降。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"缺页中断频繁会导致系统抖动和性能下降。
+
+- 关键概念：缺页中断是指当操作系统尝试访问一个不在物理内存中的虚拟地址时发生的中断。这通常意味着需要将该页面从磁盘调入内存。
+- 步骤或原因：当频繁发生缺页中断，",operating_systems.md(0.8173); ai_rag_notes.md(0.4418); computer_networks.md(0.4000); database_systems.md(0.3798),1,0.88,0.0,1,0.5492,135.0911,135.6403,
+baseline,13,操作系统,死锁产生的四个必要条件是什么？,四个必要条件是互斥、占有并等待、不可抢占和循环等待。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"死锁产生的四个必要条件是互斥、占有并等待、不可抢占和循环等待。
+
+- 互斥：至少一个资源必须处于独占使用状态，不允许其他进程同时访问。
+- 占有并等待：当一个进程已经获得某些资源但还需要额外的资源才能继续执行时",operating_systems.md(0.7598); computer_networks.md(0.4000); computer_networks.md(0.3584); ai_rag_notes.md(0.3432),1,1.0,0.0,1,0.561,148.3208,148.8819,
+baseline,14,操作系统,银行家算法属于哪类死锁处理策略？,银行家算法属于死锁避免策略，会在资源分配前判断系统是否处于安全状态。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"银行家算法属于死锁避免策略。
+
+### 关键概念与步骤：
+- **互斥条件**：资源分配时必须保证每次只能一个进程使用某项资源。
+- **请求和保持条件**：进程可以申请并持有多个资源，但不能同时申请已持有的资源。
+- **不",operating_systems.md(0.7950); operating_systems.md(0.4240); database_systems.md(0.4000); database_systems.md(0.3770),1,0.5758,0.0,1,0.5683,163.7568,164.3252,
+baseline,15,操作系统,日志文件系统为什么能提高崩溃恢复能力？,日志文件系统先记录元数据操作日志，再修改结构，崩溃后可根据日志恢复一致性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"日志文件系统通过记录元数据操作日志，在系统崩溃后能够恢复文件系统的结构一致性。这主要是因为日志文件系统在真正修改文件系统结构之前会先记录这些操作的日志。
+
+1. **关键概念**：日志文件系统是一种特殊的文件系统，它会在进行任何",operating_systems.md(0.7415); database_systems.md(0.4439); ai_rag_notes.md(0.4212); ai_rag_notes.md(0.4136),1,0.9032,0.0,1,0.7646,165.2181,165.9828,
+baseline,16,数据库,关系数据库中的主键和外键分别有什么作用？,主键唯一标识表中记录，外键表达表之间的引用关系。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"主键用于唯一标识关系数据库表中的记录，而外键则用于表达不同表之间的引用关系。
+
+- 关键概念：主键是关系数据库中用来唯一标识每一行数据的字段或字段组合。它确保了每一条记录都是唯一的，并且不能重复也不能为NULL。
+-",database_systems.md(0.8464); database_systems.md(0.5224); computer_networks.md(0.4198); ai_rag_notes.md(0.3992),1,1.0,0.0,1,0.6824,133.4723,134.1548,
+baseline,17,数据库,数据库规范化的目的是什么？,规范化用于减少数据冗余和更新异常，提高数据一致性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"数据库规范化的主要目的是减少数据冗余和更新异常，从而提高数据的一致性和完整性。
+
+- 关键概念：第一范式要求属性不可再分；第二范式要求非主属性完全依赖候选键；第三范式要求非主属性不传递依赖候选键。
+- 步骤或",database_systems.md(0.7716); ai_rag_notes.md(0.4000); computer_networks.md(0.3899); computer_networks.md(0.3646),1,0.913,0.0,1,0.5878,123.9683,124.5562,
+baseline,18,数据库,第三范式主要约束什么问题？,第三范式要求非主属性不传递依赖候选键，以减少传递依赖带来的异常。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"第三范式主要用于解决非主属性对候选键的传递依赖问题。
+
+- 关键概念：在数据库设计中，第三范式（3NF）要求一个关系模式中的所有非主属性都完全函数依赖于整个候选键。这意味着不能存在这样的情况：某个非主属性A依赖于",database_systems.md(0.8500); ai_rag_notes.md(0.5739); ai_rag_notes.md(0.4313); ai_rag_notes.md(0.4081),1,0.75,0.0,1,0.5671,139.1098,139.6769,
+baseline,19,数据库,B+ 树索引为什么适合范围查询？,B+ 树叶子节点按键值有序并通过链表相连，便于顺序扫描范围数据。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"B+树索引适合范围查询的原因在于其结构特点：叶子节点按键值有序，并通过链表相连。这种特性使得在进行范围查询时可以高效地定位到起始位置并顺序遍历至结束位置。
+
+1. **关键概念**：B+树是一种多路平衡查找",database_systems.md(0.8500); computer_networks.md(0.3576); computer_networks.md(0.3520); database_systems.md(0.3373),1,0.0,0.0,1,0.6105,95.6081,96.2186,
+baseline,20,数据库,索引会带来哪些代价？,索引会占用额外存储空间，并增加插入、删除、更新时维护索引的开销。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"索引能提高读取性能，但也会带来额外的存储空间占用以及在插入、删除和更新时维护索引的开销。
+
+- 索引会占用额外的存储空间。这是因为索引需要为每个键值创建一个数据结构来存储指向实际记录的位置信息。
+-",database_systems.md(0.8022); database_systems.md(0.4520); arxiv_002_2605.22820v1.md(0.3923); computer_networks.md(0.3916),1,0.8966,0.0,1,0.4486,124.0499,124.4986,
+baseline,21,数据库,事务 ACID 分别表示什么？,ACID 表示原子性、一致性、隔离性和持久性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"事务ACID分别代表原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）。这四个特性确保了数据库操作的正确性和可靠性。
+
+- 原子性：保证事务中的所有操作要么全部成功执行，要么全部不执行。
+-",database_systems.md(0.9179); database_systems.md(0.8267); computer_networks.md(0.4265); ai_rag_notes.md(0.3350),1,0.0,0.0,1,0.5346,133.9153,134.45,
+baseline,22,数据库,MVCC 如何减少读写冲突？,MVCC 保存数据多个版本，让读操作读取一致性快照，从而减少读写冲突。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"MVCC 通过保存数据的多个版本，让读操作可以读取一致性快照，从而减少读写冲突。
+
+- 关键概念：MVCC（多版本并发控制）是一种数据库技术，它允许在事务执行期间存在多个数据版本。
+- 步骤或原因：
+  1",database_systems.md(0.8527); arxiv_020_2605.22765v1.md(0.4099); arxiv_004_2605.22814v1.md(0.3879),1,0.5,0.0,1,0.5718,95.882,96.4539,
+baseline,23,人工智能,Transformer 为什么不依赖循环结构也能建模序列关系？,Transformer 通过自注意力计算序列中不同位置之间的关联，并使用位置编码补充词序信息。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"Transformer 不依赖循环结构也能建模序列关系，主要是通过自注意力机制实现了不同位置之间的关联。
+
+1. **关键概念**：Transformer 采用的是自注意力（Self-Attention）机制。在传统的循环神经网络中，信息是通过递归或循环的方式逐个处理的，这限制",ai_rag_notes.md(0.9535); cse_017_acknowledgments.md(0.5139); cse_006_data-processing.md(0.5075); arxiv_015_2605.22775v1.md(0.4583),1,0.5,0.0,1,0.8213,102.7332,103.5546,
+baseline,24,人工智能,多头注意力的作用是什么？,多头注意力可以在多个表示子空间中学习不同关系，增强模型表达能力。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"多头注意力机制能够学习序列中不同位置之间的多种关系，并通过多个并行的注意力子空间进行信息提取。
+
+- 多头注意力机制的关键在于它可以在不同的表示子空间中学习到输入序列中的不同关系。具体来说，在一个Transformer模型中，输入序列会被映射到高",ai_rag_notes.md(0.8500); computer_networks.md(0.4775); computer_networks.md(0.4175); database_systems.md(0.3238),1,0.8966,0.0,1,0.6311,145.6877,146.3189,
+baseline,25,RAG,Ollama 本地部署在课程设计中有什么优势？,本地部署使专业文档无需上传第三方服务，便于保护隐私和复现实验环境。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"Ollama 本地部署在课程设计中的优势在于保护专业文档隐私并方便复现实验环境。
+
+1. **保护专业文档隐私**：通过本地部署大语言模型，可以避免将敏感数据上传到第三方服务，从而有效防止数据泄露。这确保了用户的数据安全和隐私。",ai_rag_notes.md(0.9068); computer_networks.md(0.4199); operating_systems.md(0.3220); computer_networks.md(0.3130),1,0.9091,0.0,1,0.5505,151.248,151.7985,
+baseline,26,RAG,Embedding 在 RAG 中承担什么任务？,Embedding 把文本映射为高维向量，使系统能用余弦相似度进行语义检索。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"Embedding 在 RAG 系统中用于将文本转换为高维向量表示，使得语义相近的文本在向量空间中的距离更近。这有助于提高检索相关性。
+
+- 关键概念：Embedding 模型通过学习文本特征，将其映射到一个高维",ai_rag_notes.md(0.8316); ai_rag_notes.md(0.8300); cse_006_data-processing.md(0.7637); cse_005_dataset-size.md(0.6068),1,0.5,0.0,1,0.5602,119.1773,119.7376,
+baseline,27,RAG,RAG 的基本流程是什么？,RAG 流程包括文档解析、文本切分、向量化入库、问题向量化、相似度检索、Prompt 拼接和答案生成。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"RAG（Retrieval-Augmented Generation）的基本流程包括文档解析、文本切分、向量化入库、问题向量化、相似度检索、Prompt 拼接和答案生成。
+
+1. **文档解析**：首先对输入的文档进行解析，提取出关键信息。
+2. **",ai_rag_notes.md(1.0000); cse_009_using-with-rag-systems.md(0.6112); ai_rag_notes.md(0.6111); operating_systems.md(0.5471),1,0.3333,0.0,1,0.5835,143.8993,144.483,
+baseline,28,RAG,RAG 可以缓解大模型的哪些问题？,RAG 可以缓解知识过时、专业知识不足和幻觉问题。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"RAG（Retrieval-Augmented Generation）系统可以缓解大模型的知识过时、专业知识不足和幻觉问题。
+
+1. **知识过时**：通过结合外部知识库检索最新的信息，RAG 系统能够提供更准确且及时的答案。当大模型中的知识已经过时",ai_rag_notes.md(0.9696); ai_rag_notes.md(0.6744); cse_009_using-with-rag-systems.md(0.5338); cse_001_cse-course-rag-dataset.md(0.4946),1,0.0,0.0,1,0.6444,131.32,131.9645,
+baseline,29,RAG,专业文档问答的 Prompt 为什么要要求拒绝编造？,因为检索片段可能没有答案，拒绝编造可以降低幻觉并提升答案可信度。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"专业文档问答的Prompt要求拒绝编造是为了确保答案的准确性和可靠性。这一步骤能够保证生成的答案基于提供的资料，避免模型根据自身知识或假设进行回答。
+
+1. **关键概念**：在专业文档问答场景中，用户通常期望获得精确、可靠的信息，这些信息直接",ai_rag_notes.md(0.9782); ai_rag_notes.md(0.8337); ai_rag_notes.md(0.3520); database_systems.md(0.3433),1,0.4643,0.0,1,0.6086,140.0333,140.6421,
+baseline,30,RAG,影响 RAG 最终效果的关键因素有哪些？,检索质量、文档切分策略和提示词约束会直接影响最终问答效果。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"影响RAG最终效果的关键因素主要包括检索质量、切分策略和提示词约束。
+
+- 检索质量：文档解析后的片段需要准确地被向量化并存储在知识库中。当用户提问时，系统通过余弦相似度计算问题与片段之间的匹配程度，高质量的",ai_rag_notes.md(0.9274); cse_009_using-with-rag-systems.md(0.6647); ai_rag_notes.md(0.5464); cse_001_cse-course-rag-dataset.md(0.5303),1,0.8621,0.0,1,0.539,121.0853,121.6244,
+stepwise,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段1提供了关于计算机网络分层体系结构的信息，明确指出了其主要意义。因此，这些信息是充分的。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段1",computer_networks.md(0.8500); computer_networks.md(0.3656); ai_rag_notes.md(0.3626); database_systems.md(0.3553),1,0.1951,0.0,1,0.4689,196.9817,197.4507,
+stepwise,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段1提供了关于OSI参考模型的信息。因此，信息是充足的，可以继续进行下一步。
+
+## 步骤 2：关键事实提取
+[片段1] 计算机网络通常采用分层体系结构来降低系统复杂度",computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654); arxiv_012_2605.22781v1.md(0.4421); ai_rag_notes.md(0.4369),1,0.0,1.0,1,0.6401,109.0858,109.726,
+stepwise,3,网络,TCP 为什么适合文件传输和网页访问？,TCP 面向连接并提供可靠传输，使用确认、重传、流量控制和拥塞控制保证数据可靠到达。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料片段1提供了关于TCP协议的详细描述，说明了它为何适合文件传输和网页访问。因此，知识库中的信息是充足的。
+
+## 步骤 2：关键事实提取
+[片段1] TCP 是面向连接的可靠传输协议",computer_networks.md(0.9002); computer_networks.md(0.4499); ai_rag_notes.md(0.4000); database_systems.md(0.3712),1,0.5,1.0,1,0.6259,167.7376,168.3636,
+stepwise,4,网络,UDP 的特点和典型应用场景是什么？,UDP 无连接、开销小、时延低，不保证可靠交付，常用于 DNS、实时音视频和在线游戏。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段1提供了关于UDP的详细描述，包括其特点及其典型应用场景。因此，这些信息足以回答用户的问题。
+
+## 步骤 2：关键事实提取
+[片段1] UDP 是无连接传输协议。它不保证可靠交付",computer_networks.md(0.9102); computer_networks.md(0.7823); computer_networks.md(0.4248); ai_rag_notes.md(0.4163),1,0.3333,1.0,1,0.5819,122.8857,123.4676,
+stepwise,5,网络,CIDR 中 192.168.1.0/24 表示什么？,它表示前 24 位是网络前缀，对应 192.168.1.0 这个网络范围。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于 CIDR 的相关信息，因此信息是充足的。
+
+## 步骤 2：关键事实提取
+[片段1] 文件：computer_networks.md
+CIDR 使用“地址/前缀长度”的方式表示网络范围，例如 1",computer_networks.md(1.0000); arxiv_013_2605.22779v1.md(0.3728); arxiv_011_2605.22785v1.md(0.3041); arxiv_014_2605.22776v1.md(0.3022),1,0.0,1.0,1,0.4541,119.9577,120.4119,
+stepwise,6,网络,HTTPS 相比 HTTP 增加了哪些安全能力？,HTTPS 在 HTTP 与 TCP 之间加入 TLS，提供身份认证、数据加密和完整性校验。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于 HTTPS 的相关信息，可以回答用户的问题。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段4] HTTPS 在 HTTP 与 TCP 之间加入 TLS 加密层，用于",computer_networks.md(0.8749); arxiv_002_2605.22820v1.md(0.5843); ai_rag_notes.md(0.5679); arxiv_009_2605.22791v1.md(0.5673),1,0.8571,1.0,1,0.6286,121.845,122.4737,
+stepwise,7,网络,DNS 缓存有什么作用？,DNS 缓存可以减少重复查询并提高访问速度，但缓存过期时间会影响域名变更生效速度。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段2和片段3提到了 DNS 解析，但没有直接提及 DNS 缓存的作用。片段4与 DNS 缓解无关。片段1中提到“DNS缓存可以减少重复查询，提高访问速度”，这正是我们要找的答案",computer_networks.md(0.9476); computer_networks.md(0.6611); computer_networks.md(0.4894); arxiv_002_2605.22820v1.md(0.4257),1,0.5,0.0,1,0.6633,131.4197,132.0831,
+stepwise,8,操作系统,进程和线程的核心区别是什么？,进程是资源分配和保护的基本单位，线程是 CPU 调度的基本单位；同一进程内线程共享地址空间和资源。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的信息足以回答用户关于进程和线程核心区别的问题。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段1] 进程是操作系统进行资源分配和保护的基本单位",operating_systems.md(0.8125); operating_systems.md(0.4023); computer_networks.md(0.4000); ai_rag_notes.md(0.3770),1,0.0,1.0,1,0.5918,143.6841,144.2759,
+stepwise,9,操作系统,线程共享数据为什么还需要锁或信号量？,线程共享进程地址空间，多个线程并发访问共享数据可能产生竞态条件，因此需要同步机制。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的信息足以回答该问题。
+
+## 步骤 2：关键事实提取
+[片段1] 线程是 CPU 调度的基本单位，同一进程内的多个线程共享进程地址空间和大部分资源，但各自拥有程序",operating_systems.md(0.8318); database_systems.md(0.4722); computer_networks.md(0.4423); ai_rag_notes.md(0.4239),1,0.4571,1.0,1,0.6653,148.7596,149.425,
+stepwise,10,操作系统,时间片轮转调度为什么适合交互式系统？,时间片轮转为每个就绪进程分配固定时间片，提升公平性和响应性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段2和片段3与用户问题相关的信息较少，但片段1中提供了关于时间片轮转调度的相关内容。因此，可以继续进行下一步。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键",operating_systems.md(0.7571); database_systems.md(0.4287); ai_rag_notes.md(0.3621); computer_networks.md(0.3510),1,0.3846,0.0,1,0.4851,165.5487,166.0338,
+stepwise,11,操作系统,虚拟内存的作用是什么？,虚拟内存将进程地址空间与物理内存解耦，扩大可用地址空间、提供隔离并支持按需分页。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段1和片段3提到了虚拟内存的相关内容，可以用来回答用户的问题。因此信息是充分的。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段1]",operating_systems.md(0.8500); operating_systems.md(0.6028); computer_networks.md(0.5271); computer_networks.md(0.4159),1,0.3235,1.0,1,0.6692,152.4755,153.1448,
+stepwise,12,操作系统,缺页中断频繁会导致什么问题？,频繁缺页会使系统不断换入换出页面，导致抖动和性能下降。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提到了虚拟内存的相关内容，并明确说明了缺页中断发生时的操作，以及频繁缺页可能导致的问题。因此，知识库中的信息是充足的。
+
+## 步骤 2：关键事实提取
+[片段1] 虚拟",operating_systems.md(0.8173); ai_rag_notes.md(0.4418); computer_networks.md(0.4000); database_systems.md(0.3798),1,0.4,1.0,1,0.593,134.1869,134.7801,
+stepwise,13,操作系统,死锁产生的四个必要条件是什么？,四个必要条件是互斥、占有并等待、不可抢占和循环等待。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+根据参考资料中的内容，[片段2] 提到了死锁的相关信息，并明确列出了产生死锁的四个必要条件。因此，知识库中提供的信息是充足的。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题",operating_systems.md(0.7598); computer_networks.md(0.4000); computer_networks.md(0.3584); ai_rag_notes.md(0.3432),1,0.4091,1.0,1,0.5676,143.6769,144.2446,
+stepwise,14,操作系统,银行家算法属于哪类死锁处理策略？,银行家算法属于死锁避免策略，会在资源分配前判断系统是否处于安全状态。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于死锁的信息，包括产生死锁的必要条件以及处理死锁的几种策略。因此，这些信息足以回答用户的问题。
+
+## 步骤 2：关键事实提取
+[片段1] 文件：operating_systems.md",operating_systems.md(0.7950); operating_systems.md(0.4240); database_systems.md(0.4000); database_systems.md(0.3770),1,0.2727,1.0,1,0.5974,155.9191,156.5166,
+stepwise,15,操作系统,日志文件系统为什么能提高崩溃恢复能力？,日志文件系统先记录元数据操作日志，再修改结构，崩溃后可根据日志恢复一致性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的信息足以回答用户的问题。
+
+## 步骤 2：关键事实提取
+从[片段3]中提取了与日志文件系统相关的关键事实：
+- [片段3] 文件：ai_rag_notes.md，综合分：0.",operating_systems.md(0.7415); database_systems.md(0.4439); ai_rag_notes.md(0.4212); ai_rag_notes.md(0.4136),1,0.2581,1.0,1,0.5472,164.766,165.3133,
+stepwise,16,数据库,关系数据库中的主键和外键分别有什么作用？,主键唯一标识表中记录，外键表达表之间的引用关系。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于关系数据库的主键和外键的相关信息。因此可以继续进行下一步。
+
+## 步骤 2：关键事实提取
+[片段1] 主键用于唯一标识表中的记录，外键用于表达表之间的引用关系。",database_systems.md(0.8464); database_systems.md(0.5224); computer_networks.md(0.4198); ai_rag_notes.md(0.3992),1,1.0,1.0,1,0.7803,129.885,130.6653,
+stepwise,17,数据库,数据库规范化的目的是什么？,规范化用于减少数据冗余和更新异常，提高数据一致性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段提供了关于数据库规范化的基本信息。根据[片段1]的内容，可以回答用户的问题。
+
+## 步骤 2：关键事实提取
+- [片段1] 关系模型中提到：“数据库规范化用于减少数据冗余和更新异常",database_systems.md(0.7716); ai_rag_notes.md(0.4000); computer_networks.md(0.3899); computer_networks.md(0.3646),1,0.8261,1.0,1,0.6353,121.6111,122.2465,
+stepwise,18,数据库,第三范式主要约束什么问题？,第三范式要求非主属性不传递依赖候选键，以减少传递依赖带来的异常。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的[片段1]提供了关于第三范式的相关信息，因此信息是充足的。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段1] 第三范式要求非主属性不传递",database_systems.md(0.8500); ai_rag_notes.md(0.5739); ai_rag_notes.md(0.4313); ai_rag_notes.md(0.4081),1,0.6071,1.0,1,0.5694,134.9378,135.5073,
+stepwise,19,数据库,B+ 树索引为什么适合范围查询？,B+ 树叶子节点按键值有序并通过链表相连，便于顺序扫描范围数据。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+根据参考资料中的信息，片段1中提到了B+树索引的特点，说明了它适合范围查询的原因。因此，信息是充足的。
+
+## 步骤 2：关键事实提取
+[片段1] B+ 树索引适合范围",database_systems.md(0.8500); computer_networks.md(0.3576); computer_networks.md(0.3520); database_systems.md(0.3373),1,0.5,1.0,1,0.5881,103.8676,104.4558,
+stepwise,20,数据库,索引会带来哪些代价？,索引会占用额外存储空间，并增加插入、删除、更新时维护索引的开销。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于索引的相关信息。根据[片段1]和[片段3]，可以回答用户的问题。
+
+## 步骤 2：关键事实提取
+- [片段1] 索引能提高读取性能，但会占用",database_systems.md(0.8022); database_systems.md(0.4520); arxiv_002_2605.22820v1.md(0.3923); computer_networks.md(0.3916),1,0.2759,1.0,1,0.5508,122.0478,122.5987,
+stepwise,21,数据库,事务 ACID 分别表示什么？,ACID 表示原子性、一致性、隔离性和持久性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中包含了关于“事务 ACID”的相关信息。因此，可以继续进行下一步。
+
+## 步骤 2：关键事实提取
+[片段1] 事务是数据库中一组逻辑操作。ACID 表示原子性、一致性、隔离性和",database_systems.md(0.9179); database_systems.md(0.8267); computer_networks.md(0.4265); ai_rag_notes.md(0.3350),1,0.0,1.0,1,0.8466,133.0151,133.8618,
+stepwise,22,数据库,MVCC 如何减少读写冲突？,MVCC 保存数据多个版本，让读操作读取一致性快照，从而减少读写冲突。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于 MVCC（多版本并发控制）的相关信息，因此可以回答用户的问题。
+
+## 步骤 2：关键事实提取
+[片段3] 文件：arxiv_004_2605.2281",database_systems.md(0.8527); arxiv_020_2605.22765v1.md(0.4099); arxiv_004_2605.22814v1.md(0.3879),1,0.0,1.0,1,0.5364,90.8583,91.3948,
+stepwise,23,人工智能,Transformer 为什么不依赖循环结构也能建模序列关系？,Transformer 通过自注意力计算序列中不同位置之间的关联，并使用位置编码补充词序信息。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段主要涉及 Transformer 的定义、大语言模型的本地部署以及嵌入与语义检索等方面的内容。其中，[片段1] 提到了 Transformer 是一种基于注意力机制的神经网络架构，并且不依赖循环结构，但没有详细解释",ai_rag_notes.md(0.9535); cse_017_acknowledgments.md(0.5139); cse_006_data-processing.md(0.5075); arxiv_015_2605.22775v1.md(0.4583),1,0.5,1.0,1,0.6368,93.8151,94.452,
+stepwise,24,人工智能,多头注意力的作用是什么？,多头注意力可以在多个表示子空间中学习不同关系，增强模型表达能力。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段 [片段1] 提到了多头注意力机制，因此信息是充分的。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+[片段1] 多头注意力可以在多个表示子空间",ai_rag_notes.md(0.8500); computer_networks.md(0.4775); computer_networks.md(0.4175); database_systems.md(0.3238),1,0.6207,1.0,1,0.5186,141.9596,142.4783,
+stepwise,25,RAG,Ollama 本地部署在课程设计中有什么优势？,本地部署使专业文档无需上传第三方服务，便于保护隐私和复现实验环境。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中的片段2提供了关于 Ollama 本地部署的相关信息，可以用来回答用户的问题。因此，信息是充分的。
+
+## 步骤 2：关键事实提取
+[片段2] 文件：computer_networks.md
+- 用户通过 o",ai_rag_notes.md(0.9068); computer_networks.md(0.4199); operating_systems.md(0.3220); computer_networks.md(0.3130),1,0.2727,1.0,1,0.5782,144.2768,144.8551,
+stepwise,26,RAG,Embedding 在 RAG 中承担什么任务？,Embedding 把文本映射为高维向量，使系统能用余弦相似度进行语义检索。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提到了 Embedding 的相关内容，可以用来回答用户的问题。
+
+## 步骤 2：关键事实提取
+[片段1] Embedding 模型把文本映射为高维向量，使语义相近的文本在向量",ai_rag_notes.md(0.8316); ai_rag_notes.md(0.8300); cse_006_data-processing.md(0.7637); cse_005_dataset-size.md(0.6068),1,0.5,1.0,1,0.6167,114.378,114.9947,
+stepwise,27,RAG,RAG 的基本流程是什么？,RAG 流程包括文档解析、文本切分、向量化入库、问题向量化、相似度检索、Prompt 拼接和答案生成。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于 RAG 流程的相关信息，可以用来回答用户的问题。因此，继续进行下一步。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：
+- [片段1] RAG 是 Retrie",ai_rag_notes.md(1.0000); cse_009_using-with-rag-systems.md(0.6112); ai_rag_notes.md(0.6111); operating_systems.md(0.5471),1,0.3333,1.0,1,0.5768,147.743,148.3199,
+stepwise,28,RAG,RAG 可以缓解大模型的哪些问题？,RAG 可以缓解知识过时、专业知识不足和幻觉问题。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提到了 RAG（Retrieval-Augmented Generation）系统可以缓解大模型的一些问题，具体包括知识过时、专业知识不足和幻觉问题。因此，这些信息足以回答用户的问题。
+
+## 步骤 2：关键事实提取",ai_rag_notes.md(0.9696); ai_rag_notes.md(0.6744); cse_009_using-with-rag-systems.md(0.5338); cse_001_cse-course-rag-dataset.md(0.4946),1,0.0,0.0,1,0.5166,127.9219,128.4387,
+stepwise,29,RAG,专业文档问答的 Prompt 为什么要要求拒绝编造？,因为检索片段可能没有答案，拒绝编造可以降低幻觉并提升答案可信度。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"### 步骤 1：信息评估
+参考资料中的片段主要涉及 RAG 技术（检索增强生成）、Embedding 和语义检索、以及一些数据库系统的基础知识。这些内容与用户问题“专业文档问答的 Prompt 为什么要要求拒绝编造？”没有直接相关性。
+
+因此，",ai_rag_notes.md(0.9782); ai_rag_notes.md(0.8337); ai_rag_notes.md(0.3520); database_systems.md(0.3433),1,0.6071,0.0,1,0.6403,133.8505,134.4909,
+stepwise,30,RAG,影响 RAG 最终效果的关键因素有哪些？,检索质量、文档切分策略和提示词约束会直接影响最终问答效果。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"## 步骤 1：信息评估
+参考资料中提供了关于RAG系统的相关信息，包括其工作流程和关键组成部分。这些信息足以回答“影响RAG最终效果的关键因素有哪些？”的问题。
+
+## 步骤 2：关键事实提取
+从参考资料中提取与问题相关的关键事实：",ai_rag_notes.md(0.9274); cse_009_using-with-rag-systems.md(0.6647); ai_rag_notes.md(0.5464); cse_001_cse-course-rag-dataset.md(0.5303),1,0.4138,0.0,1,0.6272,106.9942,107.6215,
+reflective,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+计算机网络采用分层体系结构的主要意义在于每一层只关注本层职责，并通过接口向上层提供服务。这样既方便协议替换，也便于定位网络故障。
+
+**自我反思：**
+- ""每一层只关注本层职责，并通过接口向上层提供服务",computer_networks.md(0.8500); computer_networks.md(0.3656); ai_rag_notes.md(0.3626); database_systems.md(0.3553),1,0.7805,0.0,1,0.4646,182.8524,183.3171,
+reflective,2,网络,OSI 参考模型包含哪些层？,OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+OSI 参考模型包含物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。
+
+**自我反思：**
+根据参考资料[片段1]的内容，直接引用了 OSI 参考模型的分层结构。因此",computer_networks.md(0.9195); arxiv_004_2605.22814v1.md(0.4654); arxiv_012_2605.22781v1.md(0.4421); ai_rag_notes.md(0.4369),1,1.0,1.0,1,0.5985,116.2095,116.808,
+reflective,3,网络,TCP 为什么适合文件传输和网页访问？,TCP 面向连接并提供可靠传输，使用确认、重传、流量控制和拥塞控制保证数据可靠到达。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+TCP 适合文件传输和网页访问是因为它是一个面向连接的可靠传输协议。在传输数据前需要通过三次握手建立连接，传输过程中使用序号、确认应答、重传、流量控制和拥塞控制保证可靠性。
+
+**自我反思：**
+1.",computer_networks.md(0.9002); computer_networks.md(0.4499); ai_rag_notes.md(0.4000); database_systems.md(0.3712),1,0.5,0.0,1,0.5831,172.3491,172.9322,
+reflective,4,网络,UDP 的特点和典型应用场景是什么？,UDP 无连接、开销小、时延低，不保证可靠交付，常用于 DNS、实时音视频和在线游戏。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+UDP 是一种无连接传输协议，它不保证可靠交付，也不维护连接状态。因此它的协议开销小、时延低。典型的应用场景包括 DNS 查询、实时音视频、在线游戏等更关注实时性的场景。
+
+**自我反思：**
+1. UDP 的",computer_networks.md(0.9102); computer_networks.md(0.7823); computer_networks.md(0.4248); ai_rag_notes.md(0.4163),1,0.3333,0.0,1,0.5732,130.663,131.2363,
+reflective,5,网络,CIDR 中 192.168.1.0/24 表示什么？,它表示前 24 位是网络前缀，对应 192.168.1.0 这个网络范围。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+CIDR 中 192.168.1.0/24 表示前 24 位是网络前缀。
+
+**自我反思：**
+这个回答直接从参考资料中提取，有明确的依据。因此无需修正。
+
+**修正后的最终",computer_networks.md(1.0000); arxiv_013_2605.22779v1.md(0.3728); arxiv_011_2605.22785v1.md(0.3041); arxiv_014_2605.22776v1.md(0.3022),1,0.2,0.0,1,0.6068,128.6385,129.2453,
+reflective,6,网络,HTTPS 相比 HTTP 增加了哪些安全能力？,HTTPS 在 HTTP 与 TCP 之间加入 TLS，提供身份认证、数据加密和完整性校验。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+HTTPS 相比 HTTP 增加了身份认证、数据加密和完整性校验的能力。这些安全能力可以降低窃听、篡改和中间人攻击的风险。
+
+**自我反思：**
+根据参考资料，上述回答中的所有声明都有相应的依据支持。
+- 身",computer_networks.md(0.8749); arxiv_002_2605.22820v1.md(0.5843); ai_rag_notes.md(0.5679); arxiv_009_2605.22791v1.md(0.5673),1,0.2857,0.0,1,0.6106,131.7454,132.356,
+reflective,7,网络,DNS 缓存有什么作用？,DNS 缓存可以减少重复查询并提高访问速度，但缓存过期时间会影响域名变更生效速度。,computer_networks.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+DNS 缓存可以减少重复查询，提高访问速度。DNS 缓存过期时间也会影响域名变更生效的速度。
+
+**自我反思：**
+- ""DNS 缓存可以减少重复查询，提高访问速度"" 有依据。
+- ""DNS 缓存过",computer_networks.md(0.9476); computer_networks.md(0.6611); computer_networks.md(0.4894); arxiv_002_2605.22820v1.md(0.4257),1,0.5,0.0,1,0.6969,139.2937,139.9907,
+reflective,8,操作系统,进程和线程的核心区别是什么？,进程是资源分配和保护的基本单位，线程是 CPU 调度的基本单位；同一进程内线程共享地址空间和资源。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+进程是操作系统进行资源分配和保护的基本单位。每个进程拥有独立的地址空间、打开文件、寄存器上下文等资源。线程是 CPU 调度的基本单位，同一进程内的多个线程共享进程地址空间和大部分资源，但各自拥有",operating_systems.md(0.8125); operating_systems.md(0.4023); computer_networks.md(0.4000); ai_rag_notes.md(0.3770),1,0.3333,0.0,1,0.7277,153.6331,154.3608,
+reflective,9,操作系统,线程共享数据为什么还需要锁或信号量？,线程共享进程地址空间，多个线程并发访问共享数据可能产生竞态条件，因此需要同步机制。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+线程共享数据时需要使用锁、信号量等机制来处理并发访问带来的竞态条件。这是因为多个线程可能同时尝试读写同一个资源，如果缺乏适当的同步机制，可能会导致数据不一致或丢失。
+
+**自我反思：**
+- 该回答直接",operating_systems.md(0.8318); database_systems.md(0.4722); computer_networks.md(0.4423); ai_rag_notes.md(0.4239),1,0.7714,0.0,1,0.6288,172.4674,173.0963,
+reflective,10,操作系统,时间片轮转调度为什么适合交互式系统？,时间片轮转为每个就绪进程分配固定时间片，提升公平性和响应性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+时间片轮转调度适合交互式系统是因为它为每个就绪进程分配固定时间片，时间片用完后进程回到就绪队列尾部。这样可以提升公平性和响应性。
+
+**自我反思：**
+- 第一个声明“时间片轮转调度",operating_systems.md(0.7571); database_systems.md(0.4287); ai_rag_notes.md(0.3621); computer_networks.md(0.3510),1,1.0,0.0,1,0.6054,172.2522,172.8577,
+reflective,11,操作系统,虚拟内存的作用是什么？,虚拟内存将进程地址空间与物理内存解耦，扩大可用地址空间、提供隔离并支持按需分页。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+虚拟内存的作用是把进程看到的地址空间与物理内存解耦。操作系统通过页表把虚拟页映射到物理页框，并可以把暂时不用的页面换出到磁盘。
+
+**自我反思：**
+上述回答直接引用了参考资料中的内容，没有无依据",operating_systems.md(0.8500); operating_systems.md(0.6028); computer_networks.md(0.5271); computer_networks.md(0.4159),1,0.6176,0.0,1,0.59,153.5774,154.1675,
+reflective,12,操作系统,缺页中断频繁会导致什么问题？,频繁缺页会使系统不断换入换出页面，导致抖动和性能下降。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+缺页中断频繁会导致系统抖动和性能下降。
+
+**自我反思：**
+根据参考资料中的内容，“缺页中断发生时，操作系统需要把所需页面调入内存，如果频繁缺页，会导致系统抖动和性能下降。”这一描述直接对应了用户提出的问题",operating_systems.md(0.8173); ai_rag_notes.md(0.4418); computer_networks.md(0.4000); database_systems.md(0.3798),1,0.88,0.0,1,0.6077,141.6594,142.2672,
+reflective,13,操作系统,死锁产生的四个必要条件是什么？,四个必要条件是互斥、占有并等待、不可抢占和循环等待。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+死锁产生的四个必要条件是：
+1. 互斥：至少有一个资源是非共享的。
+2. 占有并等待：进程已经占有某个资源，但同时正在等待其他进程释放它所需的另一个资源。
+3. 不可抢占：已占有的资源不能",operating_systems.md(0.7598); computer_networks.md(0.4000); computer_networks.md(0.3584); ai_rag_notes.md(0.3432),1,0.8182,0.0,1,0.6203,150.198,150.8183,
+reflective,14,操作系统,银行家算法属于哪类死锁处理策略？,银行家算法属于死锁避免策略，会在资源分配前判断系统是否处于安全状态。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+银行家算法属于死锁避免策略。
+
+**自我反思：**
+根据参考资料中的内容，“处理死锁的策略包括预防、避免、检测与恢复。银行家算法是一种典型的死锁避免算法，它在资源分配前判断系统是否仍处于安全状态。” 这",operating_systems.md(0.7950); operating_systems.md(0.4240); database_systems.md(0.4000); database_systems.md(0.3770),1,0.9697,0.0,1,0.6034,165.8015,166.4049,
+reflective,15,操作系统,日志文件系统为什么能提高崩溃恢复能力？,日志文件系统先记录元数据操作日志，再修改结构，崩溃后可根据日志恢复一致性。,operating_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+日志文件系统通过记录元数据操作日志，在系统崩溃后可以恢复文件系统的结构一致性。具体来说，当系统正常运行时，会先执行实际的操作再写入日志；如果发生崩溃，重启后会根据日志中的信息重做或撤销",operating_systems.md(0.7415); database_systems.md(0.4439); ai_rag_notes.md(0.4212); ai_rag_notes.md(0.4136),1,0.9355,0.0,1,0.6202,175.2735,175.8939,
+reflective,16,数据库,关系数据库中的主键和外键分别有什么作用？,主键唯一标识表中记录，外键表达表之间的引用关系。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+主键用于唯一标识表中的记录；外键用于表达表之间的引用关系。
+
+**自我反思：**
+- ""主键用于唯一标识表中的记录"" 有依据。
+- ""外键用于表达表之间的引用关系"" 有依据。
+
+无需要修正。
+
+**",database_systems.md(0.8464); database_systems.md(0.5224); computer_networks.md(0.4198); ai_rag_notes.md(0.3992),1,0.9524,0.0,1,0.5649,140.7678,141.3328,
+reflective,17,数据库,数据库规范化的目的是什么？,规范化用于减少数据冗余和更新异常，提高数据一致性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+数据库规范化的目的是减少数据冗余和更新异常，提高数据的一致性和查询效率。[无依据]
+
+**自我反思：**
+- 该回答中提到“减少数据冗余和更新异常”有参考资料支持。
+- “提高数据的一致性和查询效率”的",database_systems.md(0.7716); ai_rag_notes.md(0.4000); computer_networks.md(0.3899); computer_networks.md(0.3646),1,0.913,0.0,1,0.5856,126.6577,127.2433,
+reflective,18,数据库,第三范式主要约束什么问题？,第三范式要求非主属性不传递依赖候选键，以减少传递依赖带来的异常。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+第三范式主要约束非主属性不传递依赖候选键的问题。
+
+**自我反思：**
+根据参考资料中的信息，第三范式的描述是：“第三范式要求非主属性不传递依赖候选键。”这个陈述有明确的依据支持。
+
+**修正后的最终回答：",database_systems.md(0.8500); ai_rag_notes.md(0.5739); ai_rag_notes.md(0.4313); ai_rag_notes.md(0.4081),1,0.75,0.0,1,0.6477,142.3533,143.0012,
+reflective,19,数据库,B+ 树索引为什么适合范围查询？,B+ 树叶子节点按键值有序并通过链表相连，便于顺序扫描范围数据。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+B+ 树索引适合范围查询，因为叶子节点按键值有序并通过链表相连。这种结构使得可以高效地进行区间查找。
+
+**自我反思：**
+根据参考资料中的信息，“B+ 树索引适合范围查询和排序，因为叶子节点按键值",database_systems.md(0.8500); computer_networks.md(0.3576); computer_networks.md(0.3520); database_systems.md(0.3373),1,0.5,0.0,1,0.6192,111.88,112.4994,
+reflective,20,数据库,索引会带来哪些代价？,索引会占用额外存储空间，并增加插入、删除、更新时维护索引的开销。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+索引会占用额外存储空间，并增加插入、删除和更新时维护索引的开销。这些操作可能会降低数据库性能。
+
+**自我反思：**
+- ""索引会占用额外存储空间"" 有依据，来自片段1。
+- ""增加插入、删除",database_systems.md(0.8022); database_systems.md(0.4520); arxiv_002_2605.22820v1.md(0.3923); computer_networks.md(0.3916),1,1.0,0.0,1,0.5698,127.4311,128.0011,
+reflective,21,数据库,事务 ACID 分别表示什么？,ACID 表示原子性、一致性、隔离性和持久性。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+事务 ACID 分别表示原子性、一致性、隔离性和持久性。这些特性保证了数据库操作的安全性和正确性。
+
+**自我反思：**
+- 原子性、一致性、隔离性和持久性这四个术语都有参考资料支持，因此无需标注""[无依据",database_systems.md(0.9179); database_systems.md(0.8267); computer_networks.md(0.4265); ai_rag_notes.md(0.3350),1,0.5,0.0,1,0.5339,139.1365,139.6705,
+reflective,22,数据库,MVCC 如何减少读写冲突？,MVCC 保存数据多个版本，让读操作读取一致性快照，从而减少读写冲突。,database_systems.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+MVCC 通过保存数据的多个版本，让读操作可以读取一致性快照，从而减少读写冲突。
+
+**自我反思：**
+这个回答直接从参考资料[片段1]中获取信息，并且该信息是准确的。因此无需修正或标注无依据",database_systems.md(0.8527); arxiv_020_2605.22765v1.md(0.4099); arxiv_004_2605.22814v1.md(0.3879),1,0.5,1.0,1,0.5614,97.0332,97.5947,
+reflective,23,人工智能,Transformer 为什么不依赖循环结构也能建模序列关系？,Transformer 通过自注意力计算序列中不同位置之间的关联，并使用位置编码补充词序信息。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+Transformer 通过自注意力机制直接建模序列中的关系，而不需要依赖循环结构。这种设计使得 Transformer 能够并行处理整个序列，从而提高了计算效率。
+
+**自我反思：**
+- 第一个声明“Transformer 通过自注意力机制直接建模序列中的",ai_rag_notes.md(0.9535); cse_017_acknowledgments.md(0.5139); cse_006_data-processing.md(0.5075); arxiv_015_2605.22775v1.md(0.4583),1,0.5,0.0,1,0.657,107.0588,107.7159,
+reflective,24,人工智能,多头注意力的作用是什么？,多头注意力可以在多个表示子空间中学习不同关系，增强模型表达能力。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+多头注意力的作用是在多个表示子空间中学习不同关系。这有助于模型更好地理解和处理输入序列中的复杂依赖关系。
+
+**自我反思：**
+- ""多头注意力的作用是在多个表示子空间中学习不同关系"" 这一表述有参考资料支持。
+-",ai_rag_notes.md(0.8500); computer_networks.md(0.4775); computer_networks.md(0.4175); database_systems.md(0.3238),1,0.7586,0.0,1,0.6822,149.4452,150.1276,
+reflective,25,RAG,Ollama 本地部署在课程设计中有什么优势？,本地部署使专业文档无需上传第三方服务，便于保护隐私和复现实验环境。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+Ollama 本地部署在课程设计中的优势在于数据不需要上传到第三方服务，便于保护专业文档隐私。此外，它也方便复现实验环境。
+
+**自我反思：**
+- ""数据不需要上传到第三方服务"" 和 ""便于保护专业文档隐私""",ai_rag_notes.md(0.9068); computer_networks.md(0.4199); operating_systems.md(0.3220); computer_networks.md(0.3130),1,0.9394,0.0,1,0.6557,153.987,154.6428,
+reflective,26,RAG,Embedding 在 RAG 中承担什么任务？,Embedding 把文本映射为高维向量，使系统能用余弦相似度进行语义检索。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+Embedding 在 RAG 中的主要任务是将文本转换为高维向量，使得语义相近的文本在向量空间中距离更近。这样，在用户提问时，系统可以使用余弦相似度来检索最相关的片段作为上下文。
+
+**自我反思",ai_rag_notes.md(0.8316); ai_rag_notes.md(0.8300); cse_006_data-processing.md(0.7637); cse_005_dataset-size.md(0.6068),1,0.5,0.0,1,0.6026,119.8519,120.4546,
+reflective,27,RAG,RAG 的基本流程是什么？,RAG 流程包括文档解析、文本切分、向量化入库、问题向量化、相似度检索、Prompt 拼接和答案生成。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"### 第一轮回答：
+RAG 的基本流程包括文档解析、文本切分、向量化入库、问题向量化、相似度检索、Prompt 拼接和答案生成。这个过程结合了外部知识库的检索与大模型的生成能力，旨在缓解大模型的知识过时、专业知识",ai_rag_notes.md(1.0000); cse_009_using-with-rag-systems.md(0.6112); ai_rag_notes.md(0.6111); operating_systems.md(0.5471),1,0.3333,0.0,1,0.6223,150.0813,150.7036,
+reflective,28,RAG,RAG 可以缓解大模型的哪些问题？,RAG 可以缓解知识过时、专业知识不足和幻觉问题。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+根据参考文献，RAG 可以缓解大模型的知识过时、专业知识不足和幻觉问题。此外，它还能通过检索外部知识库来增强生成的答案。
+
+**自我反思：**
+1. ""RAG 可以缓解大模型的知识过时"" -",ai_rag_notes.md(0.9696); ai_rag_notes.md(0.6744); cse_009_using-with-rag-systems.md(0.5338); cse_001_cse-course-rag-dataset.md(0.4946),1,0.0,0.0,1,0.5059,132.9827,133.4887,
+reflective,29,RAG,专业文档问答的 Prompt 为什么要要求拒绝编造？,因为检索片段可能没有答案，拒绝编造可以降低幻觉并提升答案可信度。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+根据参考资料，专业文档问答的 Prompt 要求拒绝编造是因为在检索片段中没有找到明确答案时，模型应拒绝编造并说明知识库没有找到明确答案。这样可以确保提供的信息是准确可靠的。
+
+**自我反思：**
+- 参考",ai_rag_notes.md(0.9782); ai_rag_notes.md(0.8337); ai_rag_notes.md(0.3520); database_systems.md(0.3433),1,0.75,0.0,1,0.5557,138.5572,139.1131,
+reflective,30,RAG,影响 RAG 最终效果的关键因素有哪些？,检索质量、文档切分策略和提示词约束会直接影响最终问答效果。,ai_rag_notes.md,qwen2.5:7b-instruct-q4_K_M,4,64,360,False,1,"**第一轮回答：**
+影响 RAG 最终效果的关键因素包括检索质量、切分策略和提示词约束。检索质量直接影响到从知识库中获取的相关信息的质量；切分策略决定了文档如何被分解成片段，这会影响到生成答案的准确性和相关性；提示词约束则",ai_rag_notes.md(0.9274); cse_009_using-with-rag-systems.md(0.6647); ai_rag_notes.md(0.5464); cse_001_cse-course-rag-dataset.md(0.5303),1,0.9655,0.0,1,0.6249,127.2706,127.8956,

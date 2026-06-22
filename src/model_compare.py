@@ -1,4 +1,4 @@
-import argparse
+﻿import argparse
 import csv
 import json
 from pathlib import Path
@@ -38,11 +38,25 @@ def _average(rows: List[Dict[str, object]], field: str) -> float:
     return round(mean(values), 4) if values else 0.0
 
 
-def _safe_answer(row: Dict[str, str], model: str, top_k: int) -> Dict[str, object]:
+def _safe_answer(
+    row: Dict[str, str],
+    model: str,
+    top_k: int,
+    num_predict: int | None = None,
+    timeout: int | None = None,
+    expand_context_enabled: bool | None = None,
+) -> Dict[str, object]:
     try:
         from rag_chain import answer_question
 
-        result = answer_question(row["question"], top_k=top_k, model=model)
+        result = answer_question(
+            row["question"],
+            top_k=top_k,
+            model=model,
+            num_predict=num_predict,
+            timeout=timeout,
+            expand_context_enabled=expand_context_enabled,
+        )
         reference = row.get("reference_answer", "")
         expected_source = row.get("expected_source", "")
         retrieval_hit = contains_expected_source(result, expected_source)
@@ -81,7 +95,12 @@ def run_compare(
     top_k: int,
     models: List[str],
     limit: int | None = None,
+    num_predict: int | None = None,
+    timeout: int | None = None,
+    expand_context_enabled: bool | None = None,
+    output_suffix: str = "",
 ) -> Dict[str, object]:
+    # 双模型对比沿用同一套检索流程，重点看生成模型自己的差异。
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     rows = load_questions(question_file)
     if limit is not None:
@@ -94,7 +113,14 @@ def run_compare(
         print(f"\n=== Model: {model} ===")
         for index, row in enumerate(rows, start=1):
             print(f"[{index}/{len(rows)}] {row['question']}")
-            answer_row = _safe_answer(row, model=model, top_k=top_k)
+            answer_row = _safe_answer(
+                row,
+                model=model,
+                top_k=top_k,
+                num_predict=num_predict,
+                timeout=timeout,
+                expand_context_enabled=expand_context_enabled,
+            )
             result_rows.append(
                 {
                     "model": model,
@@ -107,7 +133,8 @@ def run_compare(
                 }
             )
 
-    output_csv = RESULT_DIR / "model_compare_results.csv"
+    suffix = f"_{output_suffix}" if output_suffix else ""
+    output_csv = RESULT_DIR / f"model_compare_results{suffix}.csv"
     with output_csv.open("w", encoding="utf-8-sig", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=list(result_rows[0].keys()))
         writer.writeheader()
@@ -138,10 +165,13 @@ def run_compare(
         "question_count": len(rows),
         "top_k": top_k,
         "models": models,
+        "num_predict": num_predict,
+        "timeout": timeout,
+        "context_expansion": expand_context_enabled,
         "model_summaries": model_summaries,
         "result_file": str(output_csv),
     }
-    summary_file = RESULT_DIR / "model_compare_summary.json"
+    summary_file = RESULT_DIR / f"model_compare_summary{suffix}.json"
     summary_file.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -164,11 +194,28 @@ def main() -> None:
         default=None,
         help="limit question count for quick tests; omit for full evaluation",
     )
+    parser.add_argument("--num-predict", type=int, default=None)
+    parser.add_argument("--timeout", type=int, default=None)
+    parser.add_argument("--no-context-expansion", action="store_true")
+    parser.add_argument("--output-suffix", default="")
     args = parser.parse_args()
 
-    summary = run_compare(args.file, args.top_k, args.models, args.limit)
+    summary = run_compare(
+        args.file,
+        args.top_k,
+        args.models,
+        args.limit,
+        args.num_predict,
+        args.timeout,
+        not args.no_context_expansion,
+        args.output_suffix,
+    )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
     main()
+
+
+
+

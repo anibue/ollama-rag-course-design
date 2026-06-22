@@ -1,0 +1,4 @@
+﻿model,id,category,question,reference_answer,expected_source,success,answer,top_sources,retrieval_hit,reference_overlap,retrieve_time,generate_time,total_time,error
+deepseek-r1:7b-qwen-distill-q4_K_M,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,1,,computer_networks.md(0.8500); computer_networks.md(0.3656),1,0.0,1.6942,139.9968,141.6911,
+qwen2.5:7b-instruct-q4_K_M,1,网络,计算机网络采用分层体系结构的主要意义是什么？,分层可以降低复杂度，使每层只关注本层职责并通过接口向上层提供服务，便于协议替换和故障定位。,computer_networks.md,1,"## 步骤 1：信息评估
+参考资料中的片段1提供了关于",computer_networks.md(0.8500); computer_networks.md(0.3656),1,0.0976,0.6193,136.7221,137.3414,

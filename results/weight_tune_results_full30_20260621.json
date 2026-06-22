@@ -1,0 +1,51 @@
+{
+  "question_count": 30,
+  "top_k": 4,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "metric": "retrieval_hit_rate_then_average_top_score_margin",
+  "best": {
+    "emb": 0.3,
+    "lex": 0.55,
+    "entity": 0.15,
+    "hit_rate": 1,
+    "avg_score_margin": 0.5419
+  },
+  "all": [
+    {
+      "emb": 0.3,
+      "lex": 0.55,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.5419
+    },
+    {
+      "emb": 0.35,
+      "lex": 0.5,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.5026
+    },
+    {
+      "emb": 0.4,
+      "lex": 0.45,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4626
+    },
+    {
+      "emb": 0.45,
+      "lex": 0.4,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4191
+    },
+    {
+      "emb": 0.5,
+      "lex": 0.35,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.3747
+    }
+  ],
+  "complete": true
+}

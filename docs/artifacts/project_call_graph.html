@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ollama RAG 项目调用关系图</title>
+  <style>
+    :root {
+      --bg: #edf3ee;
+      --bg-grid: rgba(36, 74, 117, 0.08);
+      --panel: rgba(252, 254, 251, 0.92);
+      --panel-strong: rgba(247, 251, 247, 0.96);
+      --text: #16304d;
+      --muted: #5a6d82;
+      --accent: #1e5f95;
+      --accent-strong: #d97929;
+      --accent-soft: #dcebf8;
+      --border: rgba(30, 95, 149, 0.16);
+      --shadow: 0 20px 60px rgba(19, 43, 70, 0.09);
+      --line: rgba(30, 95, 149, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Bahnschrift", "Segoe UI Variable Text", "Trebuchet MS", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(var(--bg-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px),
+        radial-gradient(circle at top left, rgba(217, 121, 41, 0.08), transparent 28%),
+        linear-gradient(135deg, #f6fbf7 0%, #edf3ee 52%, #e7eef5 100%);
+      background-size: 28px 28px, 28px 28px, auto, auto;
+    }
+
+    .page {
+      max-width: 1760px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 30px 32px 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 250, 245, 0.94)),
+        var(--panel);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8% -42% auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(30, 95, 149, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #e7f0e7;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-family: "Segoe UI Variable Display", "Bahnschrift", "Microsoft YaHei", sans-serif;
+      font-size: 40px;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stat {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .hero-stat-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-stat-value {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .card {
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 251, 247, 0.9));
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-tag::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 5px rgba(217, 121, 41, 0.15);
+    }
+
+    .note {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 10px;
+    }
+
+    .hint {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .layer-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+
+    .layer-btn {
+      border: 1px solid rgba(30, 95, 149, 0.16);
+      background: rgba(248, 252, 248, 0.92);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .layer-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(44, 107, 178, 0.35);
+    }
+
+    .layer-btn.active {
+      background: linear-gradient(135deg, #215f92, #184c77);
+      color: #fff;
+      border-color: #215f92;
+      box-shadow: 0 10px 24px rgba(30, 95, 149, 0.18);
+    }
+
+    .layer-caption {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.75;
+      min-height: 28px;
+    }
+
+    .diagram-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .zoom-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .zoom-btn {
+      border: 1px solid rgba(30, 95, 149, 0.16);
+      background: rgba(248, 252, 248, 0.92);
+      color: var(--text);
+      min-width: 44px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .zoom-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(44, 107, 178, 0.35);
+    }
+
+    .diagram-wrap {
+      overflow-x: auto;
+      padding: 18px 18px 10px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(243, 248, 244, 0.96));
+      background-size: 22px 22px, 22px 22px, auto;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    }
+
+    .diagram-host {
+      min-width: 980px;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .diagram-host.is-switching {
+      opacity: 0.18;
+      transform: translateY(8px);
+    }
+
+    .diagram-stage {
+      transform-origin: top left;
+      transition: transform 0.22s ease;
+      width: fit-content;
+    }
+
+    .diagram-wrap.zoomed {
+      overflow: auto;
+      max-height: 80vh;
+      box-shadow: inset 0 0 0 1px rgba(44, 107, 178, 0.06);
+    }
+
+    .diagram-wrap.draggable {
+      cursor: grab;
+      user-select: none;
+    }
+
+    .diagram-wrap.dragging {
+      cursor: grabbing;
+    }
+
+    .diagram-wrap.zoomed .diagram-host {
+      min-width: 1200px;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .legend-item {
+      padding: 16px 16px 15px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(243, 248, 244, 0.84));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .legend-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    }
+
+    .legend-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .legend-item span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-panel {
+      margin-top: 18px;
+      padding: 22px 22px 18px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(238, 246, 252, 0.9), rgba(246, 250, 246, 0.9));
+      transform-origin: top;
+      transform: scaleY(0.92);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.3s ease;
+    }
+
+    .detail-panel.expanded {
+      max-height: 520px;
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    .detail-type {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #204f86;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .detail-panel h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .detail-panel p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .detail-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.8;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      border-top: 1px dashed rgba(30, 95, 149, 0.18);
+      padding-top: 14px;
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #edf4fb;
+      color: #23496f;
+      font-family: Consolas, "Courier New", monospace;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .mermaid .node {
+      cursor: pointer;
+      transition: filter 0.25s ease;
+    }
+
+    .mermaid .node:hover {
+      filter: brightness(1.03) drop-shadow(0 6px 12px rgba(53, 102, 184, 0.18));
+    }
+
+    .mermaid .active-node rect,
+    .mermaid .active-node polygon,
+    .mermaid .active-node path,
+    .mermaid .active-node circle {
+      stroke: var(--accent-strong) !important;
+      stroke-width: 3px !important;
+      filter: drop-shadow(0 8px 14px rgba(240, 138, 36, 0.22));
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .legend {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 960px) {
+      .legend {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+    const clickLines = `
+    click A call showNodeDetail("A") "查看模块说明"
+    click A2 call showNodeDetail("A2") "查看模块说明"
+    click C call showNodeDetail("C") "查看模块说明"
+    click B call showNodeDetail("B") "查看模块说明"
+    click B1 call showNodeDetail("B1") "查看模块说明"
+    click B2 call showNodeDetail("B2") "查看模块说明"
+    click B3 call showNodeDetail("B3") "查看模块说明"
+    click D call showNodeDetail("D") "查看模块说明"
+    click E call showNodeDetail("E") "查看模块说明"
+    click F call showNodeDetail("F") "查看模块说明"
+    click F1 call showNodeDetail("F1") "查看模块说明"
+    click F2 call showNodeDetail("F2") "查看模块说明"
+    click F3 call showNodeDetail("F3") "查看模块说明"
+    click F4 call showNodeDetail("F4") "查看模块说明"
+    click F5 call showNodeDetail("F5") "查看模块说明"
+    click F6 call showNodeDetail("F6") "查看模块说明"
+    click F7 call showNodeDetail("F7") "查看模块说明"
+    click F8 call showNodeDetail("F8") "查看模块说明"
+    click F9 call showNodeDetail("F9") "查看模块说明"
+    click F10 call showNodeDetail("F10") "查看模块说明"
+    click F11 call showNodeDetail("F11") "查看模块说明"
+    click M call showNodeDetail("M") "查看模块说明"
+    click O call showNodeDetail("O") "查看模块说明"
+    click N call showNodeDetail("N") "查看模块说明"
+    click P call showNodeDetail("P") "查看模块说明"
+    click Q call showNodeDetail("Q") "查看模块说明"
+    click G call showNodeDetail("G") "查看模块说明"
+    click H call showNodeDetail("H") "查看模块说明"
+    click I call showNodeDetail("I") "查看模块说明"
+    click J call showNodeDetail("J") "查看模块说明"
+    click K call showNodeDetail("K") "查看模块说明"
+    click L call showNodeDetail("L") "查看模块说明"
+    click R call showNodeDetail("R") "查看模块说明"
+    click S call showNodeDetail("S") "查看模块说明"
+    click T call showNodeDetail("T") "查看模块说明"
+    click U call showNodeDetail("U") "查看模块说明"
+    click V call showNodeDetail("V") "查看模块说明"
+    click W call showNodeDetail("W") "查看模块说明"
+    click X call showNodeDetail("X") "查看模块说明"
+    click Y call showNodeDetail("Y") "查看模块说明"
+    click Z call showNodeDetail("Z") "查看模块说明"
+    `;
+
+    const nodeDetails = {
+      A: { title: "data/ 本地课程资料", type: "知识源", description: "项目自建课程知识文档，是基础知识输入层。", points: ["与公开资料共同参与索引构建", "内容偏课程基础知识", "更新后通常要重新构建索引"] },
+      A2: { title: "data/public_kb/ 公开资料", type: "扩展知识源", description: "采集后的公开数据材料，用于增强知识覆盖面。", points: ["来源于公开数据采集脚本", "补充课程资料之外的内容", "适合做扩展实验"] },
+      C: { title: "src/collect_public_kb.py", type: "采集脚本", description: "负责从 Hugging Face 和 arXiv 拉取公开资料并写入本地。", points: ["支持写入 manifest", "可保存摘要或文本", "属于离线数据准备阶段"] },
+      B: { title: "src/build_kb.py", type: "索引构建入口", description: "负责文档读取、切块、向量化与本地索引生成。", points: ["读取 data/ 下支持文件", "调用 Embedding 模型", "输出 knowledge_index.json"] },
+      B1: { title: "读取文档", type: "预处理步骤", description: "统一读取文本和 PDF 文档内容，为后续处理提供标准文本。", points: ["支持多编码兜底", "PDF 按页抽取", "保留来源和页码"] },
+      B2: { title: "文本切块", type: "预处理步骤", description: "按长度和重叠窗口把长文切成更适合检索的 chunk。", points: ["尽量按自然断句切分", "保留局部上下文连续性", "直接影响召回效果"] },
+      B3: { title: "生成 Embedding", type: "向量化步骤", description: "调用本地 embedding 模型为 chunk 生成向量表示。", points: ["当前默认 nomic-embed-text", "是向量检索的基础", "结果会写入索引"] },
+      D: { title: "knowledge_index.json", type: "本地索引", description: "项目实际使用的本地知识索引，保存 chunk 文本与 embedding。", points: ["由 build_kb.py 生成", "由 rag_chain.py 读取", "当前实现是 JSON 而非真实 Chroma 服务"] },
+      E: { title: "src/config.py", type: "配置中心", description: "集中管理模型、路径、超参数和检索权重。", points: ["多个脚本共享配置", "控制默认 LLM 与 embedding", "管理 Top-K、chunk size、权重等"] },
+      F: { title: "src/rag_chain.py", type: "RAG 核心引擎", description: "统一实现检索、Prompt 组织、生成、结果整理和质量检查。", points: ["是整个项目的调用中心", "Web、CLI、实验脚本都依赖它", "最适合答辩时重点讲解"] },
+      F1: { title: "load_index", type: "索引读取", description: "从 knowledge_index.json 加载索引到内存。", points: ["是检索的起点", "依赖本地索引文件", "为后续排序提供 chunk 数据"] },
+      F2: { title: "retrieve", type: "检索核心", description: "负责把问题映射成排序后的知识片段集合。", points: ["支持 vector 与 hybrid", "决定召回质量", "是 RAG 第一阶段核心"] },
+      F3: { title: "vector 检索", type: "检索策略", description: "只按问题向量与 chunk 向量的相似度排序。", points: ["语义检索基线", "实现简单", "适合做对照实验"] },
+      F4: { title: "hybrid 检索", type: "检索策略", description: "融合向量、TF-IDF 和实体匹配分数的默认检索方案。", points: ["兼顾语义与关键词", "支持权重调优", "是 adaptive 的基础"] },
+      F5: { title: "语义去重", type: "结果优化", description: "对相似片段聚类，只保留更有代表性的结果。", points: ["减少重复上下文", "提高上下文多样性", "降低窗口浪费"] },
+      F6: { title: "上下文扩展", type: "结果优化", description: "追加相邻 chunk，补足被切开的局部语境。", points: ["帮助回答更完整", "适合连续段落", "与 adaptive 可配合使用"] },
+      F7: { title: "generate_with_ollama", type: "生成调用", description: "封装对本地 Ollama 生成接口的统一调用。", points: ["问答与判断逻辑共用", "统一控制参数", "连接上下文与模型推理"] },
+      F8: { title: "answer_question", type: "标准问答流程", description: "单轮问答主流程，完成检索、上下文拼接和最终生成。", points: ["支持三种 Prompt 模式", "默认走 hybrid + stepwise", "实验脚本广泛复用"] },
+      F9: { title: "answer_question_adaptive", type: "自适应问答流程", description: "先检索一轮，再判断是否需要扩大范围进行第二轮检索。", points: ["适合复杂问题", "提高召回覆盖率", "用于 adaptive 实验"] },
+      F10: { title: "充分性判断", type: "动态门控", description: "判断当前检索结果够不够回答问题，再决定是否扩检。", points: ["不是所有问题都强制扩检", "让检索更灵活", "提升复杂问题稳定性"] },
+      F11: { title: "忠实度检查", type: "质量评估", description: "对生成后的回答再做一次有据可查性判断。", points: ["适合展示可解释性", "会增加一次模型调用", "Web 端可按需开启"] },
+      M: { title: "Ollama /api/generate", type: "本地模型服务", description: "本地模型推理接口，是生成阶段的底层依赖。", points: ["问答和判断都依赖它", "与 config 中模型参数绑定", "保证系统本地化运行"] },
+      O: { title: "src/app.py", type: "Web 入口", description: "基于 Streamlit 的可视化问答界面。", points: ["支持多轮对话", "支持模式和 Prompt 切换", "适合演示展示"] },
+      N: { title: "CLI 用户入口", type: "命令行入口", description: "通过命令行直接调用 RAG 核心逻辑。", points: ["适合调试与自动化", "输出答案与耗时", "能快速复现实验"] },
+      P: { title: "答案输出", type: "最终结果", description: "统一承载答案、来源片段和时间开销等结果信息。", points: ["是用户直接看到的层", "也是评测提取指标的来源", "CLI 与 Web 共用"] },
+      Q: { title: "eval_questions.csv", type: "评测数据集", description: "所有实验脚本共用的题集输入。", points: ["含问题、参考答案与期望来源", "支持统一对照", "用于多类实验"] },
+      G: { title: "评测/实验配置依赖", type: "抽象说明节点", description: "表示实验脚本共同依赖配置层。", points: ["不是实际文件", "用于图上简化结构", "帮助说明配置复用关系"] },
+      H: { title: "src/eval.py", type: "单模型评测", description: "对完整题集做批量评测并输出总体指标。", points: ["适合课程设计基础实验", "复用 answer_question", "输出 CSV 与 JSON"] },
+      I: { title: "src/rag_strategy_compare.py", type: "策略对比实验", description: "对比 vector、hybrid、adaptive 三种检索模式。", points: ["适合展示检索优化效果", "属于控制变量实验", "可统计多轮检索信息"] },
+      J: { title: "src/prompt_compare.py", type: "Prompt 对比实验", description: "仅对比 Prompt，不改检索逻辑。", points: ["比较提示词对答案质量影响", "适合方法对比章节", "突出 stepwise / reflective 的作用"] },
+      K: { title: "src/model_compare.py", type: "模型对比实验", description: "对比不同本地大模型在同一流程下的效果。", points: ["常见于 Qwen 与 DeepSeek 对比", "可比较速度与质量", "控制变量清晰"] },
+      L: { title: "src/weight_tune.py", type: "权重调优实验", description: "对混合检索权重做网格搜索，寻找更优组合。", points: ["会临时改配置", "重载 rag_chain 再跑实验", "适合讲参数调优"] },
+      R: { title: "eval_results.csv", type: "评测结果明细", description: "保存逐题评测结果，便于误差分析。", points: ["由 eval.py 生成", "适合逐题复盘", "支撑汇总指标"] },
+      S: { title: "eval_summary.json", type: "评测汇总", description: "保存总体评测指标，适合直接用于报告。", points: ["包含平均指标", "适合做横向对比", "是实验结论材料"] },
+      T: { title: "rag_strategy_compare_results.csv", type: "实验结果明细", description: "保存检索策略对比的逐题结果。", points: ["来自策略对比实验", "适合看单题差异", "支撑摘要结论"] },
+      U: { title: "rag_strategy_compare_summary.json", type: "实验汇总", description: "保存策略对比实验的汇总指标。", points: ["适合报告直接引用", "突出模式差异", "对比 vector/hybrid/adaptive"] },
+      V: { title: "prompt_compare_results.csv", type: "实验结果明细", description: "保存不同 Prompt 的逐题输出对比。", points: ["适合分析 Prompt 差异", "能看引用质量变化", "由 prompt_compare.py 生成"] },
+      W: { title: "prompt_compare_summary.json", type: "实验汇总", description: "保存 Prompt 对比实验的总体结果。", points: ["适合写实验结论", "突出 stepwise 的优势", "汇总效率高"] },
+      X: { title: "model_compare_results.csv", type: "实验结果明细", description: "保存不同模型的逐题对比结果。", points: ["适合误差分析", "可看生成时间差异", "支撑模型选型结论"] },
+      Y: { title: "model_compare_summary.json", type: "实验汇总", description: "保存模型对比总体指标。", points: ["可直接用于表格", "适合对比性能和质量", "输出清晰"] },
+      Z: { title: "weight_tune_results.json", type: "调参结果", description: "保存权重搜索的全部结果和最优组合。", points: ["反映检索权重调优过程", "适合写优化章节", "能展示参数搜索逻辑"] }
+    };
+
+    const diagrams = {
+      all: `
+flowchart LR
+    A["data/ 本地课程资料"] --> B["src/build_kb.py"]
+    A2["data/public_kb/ 公开资料"] --> B
+    C["src/collect_public_kb.py"] --> A2
+    B --> B1["读取文档<br/>read_text_file / read_pdf"]
+    B1 --> B2["文本切块<br/>split_text / build_chunks"]
+    B2 --> B3["生成 Embedding<br/>OllamaEmbeddings"]
+    B3 --> D["chroma_db/knowledge_index.json"]
+    E["src/config.py"] --> B
+    E --> F
+    E --> G["评测/实验配置依赖"]
+    G --> H["src/eval.py"]
+    G --> I["src/rag_strategy_compare.py"]
+    G --> J["src/prompt_compare.py"]
+    G --> K["src/model_compare.py"]
+    G --> L["src/weight_tune.py"]
+    D --> F["src/rag_chain.py"]
+    F --> F1["load_index"]
+    F1 --> F2["retrieve"]
+    F2 --> F3["vector 检索<br/>余弦相似度"]
+    F2 --> F4["hybrid 检索<br/>向量 + TF-IDF + 实体匹配"]
+    F2 --> F5["deduplicate_by_similarity<br/>语义去重"]
+    F2 --> F6["expand_context<br/>上下文扩展"]
+    F --> F7["generate_with_ollama"]
+    F7 --> M["Ollama /api/generate"]
+    F --> F8["answer_question"]
+    F --> F9["answer_question_adaptive"]
+    F9 --> F10["充分性判断<br/>不足则二轮检索"]
+    F --> F11["check_faithfulness"]
+    N["CLI 用户"] --> F
+    O["src/app.py<br/>Streamlit 界面"] --> F8
+    O --> F9
+    O --> F11
+    F8 --> P["答案 + 来源片段 + 耗时"]
+    F9 --> P
+    O --> P
+    F --> P
+    Q["eval_questions.csv"] --> H
+    H --> F8
+    H --> F7
+    H --> R["results/eval_results.csv"]
+    H --> S["results/eval_summary.json"]
+    Q --> I
+    I --> F8
+    I --> F9
+    I --> T["results/rag_strategy_compare_results.csv"]
+    I --> U["results/rag_strategy_compare_summary.json"]
+    Q --> J
+    J --> F8
+    J --> V["results/prompt_compare_results.csv"]
+    J --> W["results/prompt_compare_summary.json"]
+    Q --> K
+    K --> F8
+    K --> X["results/model_compare_results.csv"]
+    K --> Y["results/model_compare_summary.json"]
+    Q --> L
+    L --> E
+    L --> F
+    L --> Z["results/weight_tune_results.json"]
+${clickLines}
+`,
+      core: `
+flowchart LR
+    A["data/ 本地课程资料"] --> B["src/build_kb.py"]
+    A2["data/public_kb/ 公开资料"] --> B
+    B --> B2["文本切块"]
+    B2 --> B3["生成 Embedding"]
+    B3 --> D["knowledge_index.json"]
+    E["src/config.py"] --> F["src/rag_chain.py"]
+    D --> F
+    F --> F2["retrieve"]
+    F2 --> F4["hybrid 检索"]
+    F2 --> F5["语义去重"]
+    F2 --> F6["上下文扩展"]
+    F --> F7["generate_with_ollama"]
+    F7 --> M["Ollama /api/generate"]
+    F --> F8["answer_question"]
+    F --> F9["answer_question_adaptive"]
+    F9 --> F10["充分性判断"]
+    O["src/app.py"] --> F8
+    O --> F9
+    N["CLI 用户"] --> F
+    F8 --> P["答案输出"]
+    F9 --> P
+${clickLines}
+`,
+      data: `
+flowchart LR
+    C["src/collect_public_kb.py"] --> A2["data/public_kb/ 公开资料"]
+    A["data/ 本地课程资料"] --> B["src/build_kb.py"]
+    A2 --> B
+    E["src/config.py"] --> B
+    B --> B1["读取文档"]
+    B1 --> B2["文本切块"]
+    B2 --> B3["生成 Embedding"]
+    B3 --> D["chroma_db/knowledge_index.json"]
+    D --> F["src/rag_chain.py"]
+${clickLines}
+`,
+      experiment: `
+flowchart LR
+    E["src/config.py"] --> H["src/eval.py"]
+    E --> I["src/rag_strategy_compare.py"]
+    E --> J["src/prompt_compare.py"]
+    E --> K["src/model_compare.py"]
+    E --> L["src/weight_tune.py"]
+    Q["eval_questions.csv"] --> H
+    Q --> I
+    Q --> J
+    Q --> K
+    Q --> L
+    F["src/rag_chain.py"] --> H
+    F --> I
+    F --> J
+    F --> K
+    F --> L
+    H --> R["eval_results.csv"]
+    H --> S["eval_summary.json"]
+    I --> T["rag_strategy_compare_results.csv"]
+    I --> U["rag_strategy_compare_summary.json"]
+    J --> V["prompt_compare_results.csv"]
+    J --> W["prompt_compare_summary.json"]
+    K --> X["model_compare_results.csv"]
+    K --> Y["model_compare_summary.json"]
+    L --> Z["weight_tune_results.json"]
+${clickLines}
+`
+    };
+
+    const layerDescriptions = {
+      all: "展示完整的数据流、核心问答链路与实验脚本之间的总关系，适合整体讲解项目架构。",
+      core: "只看从知识源到答案输出的主链路，适合答辩时集中讲核心实现。",
+      data: "只看数据采集、文档处理、向量化与索引构建流程，适合讲知识库准备过程。",
+      experiment: "只看评测与对比实验脚本如何复用核心能力，适合讲实验设计与结果产出。"
+    };
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "loose",
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#e7f0ff",
+        primaryTextColor: "#10233f",
+        primaryBorderColor: "#3566b8",
+        lineColor: "#4d648d",
+        secondaryColor: "#eef6ea",
+        tertiaryColor: "#fff7e8",
+        fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+      },
+      flowchart: {
+        curve: "basis",
+        useMaxWidth: true,
+        htmlLabels: true
+      }
+    });
+
+    let currentScale = 1;
+    let currentMode = "all";
+    let isZoomed = false;
+    let dragState = {
+      active: false,
+      startX: 0,
+      startY: 0,
+      scrollLeft: 0,
+      scrollTop: 0
+    };
+
+    function applyScale() {
+      const stage = document.getElementById("diagram-stage");
+      const wrap = document.getElementById("diagram-wrap");
+      const zoomValue = document.getElementById("zoom-value");
+      if (!stage || !wrap) return;
+      stage.style.transform = `scale(${currentScale})`;
+      wrap.classList.toggle("zoomed", isZoomed || currentScale > 1.05);
+      wrap.classList.toggle("draggable", isZoomed || currentScale > 1.05);
+      if (zoomValue) {
+        zoomValue.textContent = `${Math.round(currentScale * 100)}%`;
+      }
+    }
+
+    function setScale(nextScale) {
+      currentScale = Math.max(0.7, Math.min(2, nextScale));
+      applyScale();
+    }
+
+    function renderNodeDetails(id) {
+      const detail = nodeDetails[id];
+      const panel = document.getElementById("detail-panel");
+      if (!panel || !detail) return;
+
+      document.querySelectorAll(".node.active-node").forEach((node) => {
+        node.classList.remove("active-node");
+      });
+
+      const svgNode = document.getElementById(id);
+      if (svgNode) svgNode.classList.add("active-node");
+
+      document.getElementById("detail-title").textContent = detail.title;
+      document.getElementById("detail-type").textContent = detail.type;
+      document.getElementById("detail-description").textContent = detail.description;
+
+      const list = document.getElementById("detail-points");
+      list.innerHTML = "";
+      detail.points.forEach((point) => {
+        const li = document.createElement("li");
+        li.textContent = point;
+        list.appendChild(li);
+      });
+
+      panel.classList.add("expanded");
+      panel.setAttribute("data-open", "true");
+    }
+
+    window.showNodeDetail = (id) => renderNodeDetails(id);
+
+    let diagramCounter = 0;
+
+    async function renderDiagram(mode) {
+      const host = document.getElementById("diagram-host");
+      const caption = document.getElementById("layer-caption");
+      if (!host || !diagrams[mode]) return;
+
+      currentMode = mode;
+      host.classList.add("is-switching");
+      const renderId = `diagram-${mode}-${diagramCounter++}`;
+      const { svg } = await mermaid.render(renderId, diagrams[mode]);
+      host.innerHTML = svg;
+      host.classList.remove("is-switching");
+      applyScale();
+
+      host.querySelectorAll(".node").forEach((node) => {
+        node.addEventListener("click", (event) => {
+          event.stopPropagation();
+        });
+      });
+
+      if (caption) caption.textContent = layerDescriptions[mode];
+
+      document.querySelectorAll(".layer-btn").forEach((button) => {
+        const active = button.dataset.mode === mode;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    }
+
+    window.switchLayer = (mode) => {
+      renderDiagram(mode).then(() => renderNodeDetails("F"));
+    };
+
+    window.zoomInDiagram = () => setScale(currentScale + 0.15);
+    window.zoomOutDiagram = () => setScale(currentScale - 0.15);
+    window.resetDiagramZoom = () => {
+      currentScale = 1;
+      isZoomed = false;
+      applyScale();
+    };
+    window.toggleDiagramZoom = () => {
+      isZoomed = !isZoomed;
+      if (isZoomed && currentScale < 1.2) currentScale = 1.2;
+      if (!isZoomed && currentScale > 1.2) currentScale = 1;
+      applyScale();
+    };
+
+    window.addEventListener("load", () => {
+      renderDiagram("all").then(() => {
+        renderNodeDetails("F");
+        applyScale();
+      });
+
+      const wrap = document.getElementById("diagram-wrap");
+      if (!wrap) return;
+
+      wrap.addEventListener("mousedown", (event) => {
+        const canDrag = isZoomed || currentScale > 1.05;
+        if (!canDrag || event.button !== 0) return;
+        if (event.target.closest(".node")) return;
+
+        dragState.active = true;
+        dragState.startX = event.clientX;
+        dragState.startY = event.clientY;
+        dragState.scrollLeft = wrap.scrollLeft;
+        dragState.scrollTop = wrap.scrollTop;
+        wrap.classList.add("dragging");
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (!dragState.active) return;
+        const deltaX = event.clientX - dragState.startX;
+        const deltaY = event.clientY - dragState.startY;
+        wrap.scrollLeft = dragState.scrollLeft - deltaX;
+        wrap.scrollTop = dragState.scrollTop - deltaY;
+      });
+
+      const stopDragging = () => {
+        dragState.active = false;
+        wrap.classList.remove("dragging");
+      };
+
+      window.addEventListener("mouseup", stopDragging);
+      window.addEventListener("blur", stopDragging);
+    });
+  </script>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">PROJECT MAP</div>
+      <h1>Ollama RAG 项目调用关系图 / 流程图</h1>
+      <p class="subtitle">
+        这张页面展示了项目从公开资料采集、本地知识库构建、RAG 核心问答，到 Web/CLI 入口以及评测实验脚本之间的调用关系和数据流向。
+      </p>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <span class="hero-stat-label">主轴结构</span>
+          <span class="hero-stat-value">数据 → 索引 → 检索 → 生成</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">展示重点</span>
+          <span class="hero-stat-value">RAG 核心链路与实验复用</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">交互方式</span>
+          <span class="hero-stat-value">节点说明 / 分层切换 / 缩放拖拽</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <article class="card">
+        <div class="section-tag">System Blueprint</div>
+        <h2>调用关系图</h2>
+        <p class="note">
+          建议从左到右阅读：先看数据来源和索引构建，再看 <code>rag_chain.py</code> 的检索与生成核心，最后看上层入口和实验脚本如何复用核心能力。
+        </p>
+        <p class="hint">点击图中的节点，可以在右侧展开对应模块说明；也可以切换图层，只看某一类链路。</p>
+
+        <div class="layer-switcher" aria-label="关系图图层切换">
+          <button class="layer-btn active" data-mode="all" aria-pressed="true" onclick="switchLayer('all')">全部链路</button>
+          <button class="layer-btn" data-mode="core" aria-pressed="false" onclick="switchLayer('core')">核心链路</button>
+          <button class="layer-btn" data-mode="data" aria-pressed="false" onclick="switchLayer('data')">数据链路</button>
+          <button class="layer-btn" data-mode="experiment" aria-pressed="false" onclick="switchLayer('experiment')">实验链路</button>
+        </div>
+
+        <p id="layer-caption" class="layer-caption">
+          展示完整的数据流、核心问答链路与实验脚本之间的总关系，适合整体讲解项目架构。
+        </p>
+
+        <div class="diagram-toolbar">
+          <div class="note" style="margin:0;">点击节点查看说明；点击“放大查看”或使用缩放按钮可以更清楚地查看关系图。</div>
+          <div class="zoom-controls" aria-label="关系图缩放控制">
+            <button class="zoom-btn" type="button" onclick="zoomOutDiagram()">-</button>
+            <button class="zoom-btn" type="button" onclick="zoomInDiagram()">+</button>
+            <button class="zoom-btn" type="button" onclick="resetDiagramZoom()">重置</button>
+            <button class="zoom-btn" type="button" onclick="toggleDiagramZoom()">放大查看</button>
+            <button class="zoom-btn" type="button" id="zoom-value" aria-live="polite">100%</button>
+          </div>
+        </div>
+
+        <div class="diagram-wrap" id="diagram-wrap">
+          <div id="diagram-stage" class="diagram-stage" onclick="toggleDiagramZoom()">
+            <div id="diagram-host" class="diagram-host" aria-live="polite"></div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="card">
+        <div class="section-tag">Module Legend</div>
+        <h2>模块说明</h2>
+        <div class="legend">
+          <div class="legend-item">
+            <strong>数据准备层</strong>
+            <span><code>collect_public_kb.py</code> 负责采集公开资料，<code>data/</code> 与 <code>data/public_kb/</code> 提供知识源。</span>
+          </div>
+          <div class="legend-item">
+            <strong>索引构建层</strong>
+            <span><code>build_kb.py</code> 负责文档读取、切块、向量化，并生成本地索引文件。</span>
+          </div>
+          <div class="legend-item">
+            <strong>RAG 核心层</strong>
+            <span><code>rag_chain.py</code> 统一实现检索、去重、上下文扩展、生成和忠实度检查。</span>
+          </div>
+          <div class="legend-item">
+            <strong>交互入口层</strong>
+            <span><code>app.py</code> 提供可视化问答界面，CLI 直接调用核心问答逻辑。</span>
+          </div>
+          <div class="legend-item">
+            <strong>评测实验层</strong>
+            <span><code>eval.py</code>、<code>model_compare.py</code>、<code>prompt_compare.py</code> 等脚本复用核心模块做实验。</span>
+          </div>
+          <div class="legend-item">
+            <strong>结果输出层</strong>
+            <span>所有批量实验结果统一落在 <code>results/</code> 目录，便于写报告和做对照分析。</span>
+          </div>
+        </div>
+
+        <section id="detail-panel" class="detail-panel" data-open="false">
+          <div id="detail-type" class="detail-type">核心模块</div>
+          <h3 id="detail-title">src/rag_chain.py</h3>
+          <p id="detail-description">点击左侧关系图中的任意节点，这里会展开显示该模块在项目中的职责、位置和作用。</p>
+          <ul id="detail-points">
+            <li>统一实现检索、生成和结果组织</li>
+            <li>是 Web、CLI 与实验脚本共同依赖的核心</li>
+            <li>也是最值得优先讲解的模块</li>
+          </ul>
+        </section>
+
+        <p class="footer">
+          文件路径：<code>project_call_graph.html</code><br />
+          当前支持“点击节点展开说明”和“按链路分层切换”两种动态展示方式。
+        </p>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

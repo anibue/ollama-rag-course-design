@@ -1,0 +1,51 @@
+{
+  "question_file": "C:\\Users\\xwmsu\\Desktop\\ollama-rag-course-design\\eval_questions.csv",
+  "top_k": 2,
+  "model": "qwen2.5:7b-instruct-q4_K_M",
+  "limit": 5,
+  "metric": "retrieval_hit_rate_then_average_top_score_margin",
+  "best": {
+    "emb": 0.3,
+    "lex": 0.55,
+    "entity": 0.15,
+    "hit_rate": 1,
+    "avg_score_margin": 0.4834
+  },
+  "all": [
+    {
+      "emb": 0.3,
+      "lex": 0.55,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4834
+    },
+    {
+      "emb": 0.35,
+      "lex": 0.5,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4561
+    },
+    {
+      "emb": 0.4,
+      "lex": 0.45,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4288
+    },
+    {
+      "emb": 0.45,
+      "lex": 0.4,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.4015
+    },
+    {
+      "emb": 0.5,
+      "lex": 0.35,
+      "entity": 0.15,
+      "hit_rate": 1,
+      "avg_score_margin": 0.3678
+    }
+  ]
+}
